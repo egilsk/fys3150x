@@ -98,35 +98,22 @@ int main(int argc, char *argv[]){
       double time_special = (double) (finish - start)/(CLOCKS_PER_SEC);
 
       // LU-DECOMPOSITION
-      /*
+
       // Initalize matrix and arrays
       mat A = zeros<mat>(n,n);  vec b_tilde_lu(n);
       // Set up matrix and arrays
-      A(n-1,n-1) = 2.0; 
+      A(n-1,n-1) = 2.0; b_tilde_lu(n-1) = hh*f(x(n));
       for (int i = 0; i < n-1; i++){
 	b_tilde_lu(i) = hh*f(x(i+1));
-        A(i+1,i)  = -1.0;
-        A(i,i)    = 2.0;
         A(i,i+1)  = -1.0;
+        A(i,i)    = 2.0;
+        A(i+1,i)  = -1.0;
       }
       // Solve Ax = b
+      start = clock();
       vec v_lu = solve(A,b_tilde_lu);
-      */
-      mat A = zeros<mat>(n,n);
-      // Set up arrays for the simple case
-      vec b_lu(n);  vec x_lu(n);
-      A(0,0) = 2.0;  A(0,1) = -1;  x_lu(0) = h;  b_lu(0) =  hh*f(x_lu(0)); 
-      x_lu(n-1) = x_lu(0)+(n-1)*h; b_lu(n-1) = hh*f(x_lu(n-1)); 
-      for (int i = 1; i < n-1; i++){ 
-        x_lu(i) = x_lu(i-1)+h; 
-	b_lu(i) = hh*f(x_lu(i));
-        A(i,i-1)  = -1.0;
-        A(i,i)    = 2.0;
-        A(i,i+1)  = -1.0;
-      }
-      A(n-1,n-1) = 2.0; A(n-2,n-1) = -1.0; A(n-1,n-2) = -1.0;
-      // solve Ax = b
-      vec solution = solve(A,b_lu);
+      finish = clock();
+      double time_lu = (double) (finish - start)/(CLOCKS_PER_SEC);
 
       // Now open file and write out results
       ofile.open(fileout);
@@ -135,7 +122,7 @@ int main(int argc, char *argv[]){
       for (int i = 0; i <= n+1 ;i++) {
 	double epsilon = log10(fabs((v(i) - exact(x(i)))/exact(x(i))));
 	ofile << setw(15) << setprecision(8) << x(i);
-        //ofile << setw(15) << setprecision(8) << v_lu(i);
+        ofile << setw(15) << setprecision(8) << v(i);
 	ofile << setw(15) << setprecision(8) << exact(x(i));
 	ofile << setw(15) << setprecision(8) << epsilon << endl;
       }
@@ -143,9 +130,9 @@ int main(int argc, char *argv[]){
       ofile << setw(15) << setprecision(8) << log10(h) << endl;
       ofile.close();
       // Printing the timing-results
-      printf("Time used by general algorithm: %.4e\n", time_general);
-      printf("Time used by special algorithm: %.4e\n", time_special);
-
+      printf("Time used by general algorithm: %.4f\n", time_general);
+      printf("Time used by special algorithm: %.4f\n", time_special);
+      printf("Time used by LU-decomposition algorithm: %.4f\n", time_lu);
     }
     return 0;
 }
