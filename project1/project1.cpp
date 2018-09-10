@@ -102,7 +102,7 @@ int main(int argc, char *argv[]){
       double time_special = (double) (finish - start)/(CLOCKS_PER_SEC);
 
       // LU-DECOMPOSITION -----------------------------------------------------------------------------------------------
-      /*
+
       // Define matrix and arrays
       mat A = zeros<mat>(n,n);  vec b_tilde_lu(n); vec v_lu(n+2); 
       // Set up the endpoints of v
@@ -122,7 +122,7 @@ int main(int argc, char *argv[]){
       v_lu(span(1,n)) = solve(A,b_tilde_lu);
       finish = clock();
       double time_lu = (double) (finish - start)/(CLOCKS_PER_SEC);
-      */
+
       //------------------------------------------------------------------------------------------------------------------
 
       // Open output data file and write out results
