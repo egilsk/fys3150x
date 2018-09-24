@@ -1,12 +1,18 @@
+#include <iostream>
 #include <cmath>
 #include <armadillo>
+#include <tuple>
 
+using namespace std;
 using namespace arma;
 
+tuple <double,int,int> Find_max_nondiagonal(mat);
+mat Jacobi(mat, double, int);
+
 int main(int argc, char *argv[]){
-  
+
   // Define the number of steps
-  int N = 1000;
+  int N = 10;
   // Define the step size
   double h = 1.0/N;
   double hh = h*h;
@@ -21,24 +27,50 @@ int main(int argc, char *argv[]){
     A(i,i) = d;
     A(i+1,i) = a;
   }
-  
-  // Find eigenvalues with armadillo
-  vec eigval_arma;
-  eig_sym(eigval_arma, A);
-  x
-  // Define pi
-  double pi = 4*atan(1);
 
-  // Calculate the analytic eigenvalues
-  vec eigval_analytic(N-1);
-  for (int i = 0; i <= N-2; i++) eigval_analytic(i) = d + 2*a*cos((i+1)*pi/(N+1));
+  mat B = Jacobi(A, 1e-10, 10);
+  cout << B << endl;
 
-  // Print
-  //printf("Armadillo:   Analytic:\n");
-  for (int i = 0; i <= N-2; i++){
-    double epsilon = fabs((eigval_arma(i) - eigval_analytic(i))/eigval_analytic(i));
-    //printf("%10.4f   %9.4f\n", eigval_arma(i), eigval_analytic(i));
-    printf("%10.5f\n", epsilon);
-  }
   return 0;
+}
+
+tuple <double,int,int> Find_max_nondiagonal(mat A){
+  // Define the maximal non-diagonal element, and its indices k and l
+  double max; int k, l;
+  // Define the dimension of the matrix
+  int N = A.n_cols;
+  // Find the largest non-diagonal element
+  for (int i = 0; i < N; i++){
+    for (int j = i+1; j < N; j++){
+      double a_ij = fabs(A(i,j));
+      if (a_ij > max){
+	max = a_ij; k = i; l = j;
+      }
+    }
+  }
+return make_tuple(max, k, l);
+}
+
+mat Jacobi(mat A, double epsilon, int max_iterations){
+  
+  double max_nondiagonal = get<0>(Find_max_nondiagonal(A));
+  int k = get<1>(Find_max_nondiagonal(A));
+  int l = get<2>(Find_max_nondiagonal(A)); 
+  
+  int iterations = 0;  
+  while (max_nondiagonal > epsilon && iterations < max_iterations){
+    double s,c;
+    if (A(k,l) == 0){
+      s = 0; c = 1;
+    }
+    else{
+      double a_ll = A(l,l); double a_kk = A(k,k); double a_kl = A(k,l);
+      double tau = (a_ll - a_kk)/(2*a_kl);
+      double t = - tau + sqrt(1 + tau*tau);
+      c = 1/sqrt(1 + t*t);
+      s = c*t;
+    }
+    iterations++;
+  } 
+  return A;
 }
