@@ -1,9 +1,19 @@
 #include "jacobi.h"
 
 int main(int argc, char *argv[]){
+  // Declare the number of steps, the maximum number of iterations and the tolerance for the non-diagonal elements  
+  int N; int max_iterations; double epsilon;
+    // Read the number of steps, the number of iterations and the tolerance from the command line
+    if( argc <= 3 ){
+      cout << "Error: " << argv[0] << " reads the number of steps, the maximal number of iterations and a tolerance" << endl;
+      exit(1);
+    }
+    else{
+      N = atoi(argv[1]);
+      max_iterations = atoi(argv[2]);
+      epsilon = atof(argv[3]);
+    }
 
-  // Define the number of steps
-  int N = 10;
   // Define the step size
   double h = 1.0/N;
   double hh = h*h;
@@ -26,16 +36,17 @@ int main(int argc, char *argv[]){
   // Calculate the analytical eigenvalues
   for (int i = 0; i <= N-2; i++){ eigenvalues_analytic(i) = d + 2*a*cos((i+1)*pi/N);}
 
-  // Diagonalise the matrix using Jacobi
-  A = Jacobi(A, 1e-8, 1000);
-
   // Finding eigenvalues using Armadillo
   vec eigenvalues_arma(N-1);
   eig_sym(eigenvalues_arma, A);
+
+
+  // Diagonalise the matrix using Jacobi
+  A = Jacobi(A, epsilon, max_iterations);
   
   // Define a vector for the numerical eigenvalues
   vec eigenvalues(N-1);
-  // Collect the eigenvalues from the diagonal
+  // Collect the eigenvalues from the diagonal matrix
   for (int i = 0; i <= N-2; i++){
     eigenvalues(i) = A(i,i);
   }

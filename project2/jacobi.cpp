@@ -2,8 +2,11 @@
 #include <cmath>
 #include <armadillo>
 #include <tuple>
+#include <chrono>
 
 #include "jacobi.h"
+
+using namespace chrono;
 
 // Find the largest non-diagonal element
 
@@ -33,9 +36,13 @@ mat Jacobi(mat A, double epsilon, int max_iterations){
   int k = get<1>(Find_max_nondiagonal(A));
   int l = get<2>(Find_max_nondiagonal(A)); 
   
+  // Time the algorithm
+  auto start = high_resolution_clock::now();
+
   // Perform the Jacobi rotation until the maximal non-diagonal element reaches the desired tolerance, or after a maximum number of iterations
-  int iterations = 0;  
-  while (max_nondiagonal > epsilon && iterations < max_iterations){
+  int iterations = 0;
+    while (max_nondiagonal > epsilon && iterations < max_iterations){
+
     // Declare tau, tan, sin and cos
     double tau,t,s,c;
 
@@ -79,6 +86,13 @@ mat Jacobi(mat A, double epsilon, int max_iterations){
     l = get<2>(Find_max_nondiagonal(A));
 
     iterations++;
-  }
+    }
+
+  auto finish = high_resolution_clock::now();
+  duration<double> time_used = finish - start;
+  
+  // Print the number of iterations and time used
+  cout << "Number of iterations: " << iterations << endl;
+  cout << "Time used: " << time_used.count() << endl;
   return A;
 }
