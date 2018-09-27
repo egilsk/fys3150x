@@ -2,22 +2,38 @@ CPPflags = c++ -std=c++11
 
 LIB = -larmadillo
 
+# Test of function
 
-test :	  		test-main.o test.o
-				${CPPflags} test-main.o test.o ${LIB} -o test.exe
-
-test-main.o :		test-main.cpp 
-		        	${CPPflags} -c test-main.cpp
+test :	  		test.o jacobi.o
+				${CPPflags} test.o jacobi.o ${LIB} -o test.exe
 
 test.o :		test.cpp 
 				${CPPflags} -c test.cpp
 
-program:		project2_b.o jacobi.o
-				${CPPflags} project2_b.o jacobi.o ${LIB} -o project2_b.exe
-
-project2_b.o :		project2_b.cpp 
-		        	${CPPflags} -c project2_b.cpp
-
 jacobi.o :		jacobi.cpp 
 				${CPPflags} -c jacobi.cpp
 
+# Buckling beam
+
+buckling_beam:		buckling_beam.o jacobi.o
+				${CPPflags} buckling_beam.o jacobi.o ${LIB} -o buckling_beam.exe
+
+buckling_beam.o :	buckling_beam.cpp 
+		        	${CPPflags} -c buckling_beam.cpp
+
+
+# Quantum dot with one electron
+
+quantum_one:		quantum_one.o jacobi.o
+				${CPPflags} quantum_one.o jacobi.o ${LIB} -o quantum_one.exe
+
+quantum_one.o :		quantum_one.cpp 
+		        	${CPPflags} -c quantum_one.cpp
+
+# Quantum dot with two electrons
+
+quantum_two:		quantum_two.o jacobi.o
+				${CPPflags} quantum_two.o jacobi.o ${LIB} -o quantum_two.exe
+
+quantum_two.o :		quantum_two.cpp 
+		        	${CPPflags} -c quantum_two.cpp

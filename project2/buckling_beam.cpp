@@ -1,17 +1,18 @@
 #include "jacobi.h"
 
+using namespace chrono;
+
 int main(int argc, char *argv[]){
-  // Declare the number of steps, the maximum number of iterations and the tolerance for the non-diagonal elements  
-  int N; int max_iterations; double epsilon;
-    // Read the number of steps, the number of iterations and the tolerance from the command line
-    if( argc <= 3 ){
-      cout << "Error: " << argv[0] << " reads the number of steps, the maximal number of iterations and a tolerance" << endl;
+  // Declare the number of steps and the maximum number of iterations
+  int N; int max_iterations;
+    // Read the number of steps and the number of iterations
+    if( argc <= 2 ){
+      cout << "Error: " << argv[0] << " reads the number of steps and the maximal number of iterations" << endl;
       exit(1);
     }
     else{
       N = atoi(argv[1]);
       max_iterations = atoi(argv[2]);
-      epsilon = atof(argv[3]);
     }
 
   // Define the step size
@@ -38,11 +39,16 @@ int main(int argc, char *argv[]){
 
   // Finding eigenvalues using Armadillo
   vec eigenvalues_arma(N-1);
+  // Time the algorithm
+  auto start = high_resolution_clock::now();
   eig_sym(eigenvalues_arma, A);
+  auto finish = high_resolution_clock::now();
+  duration<double> time_used = finish - start;
 
+  cout << "Time used by Armadillo: " << time_used.count() << endl;
 
   // Diagonalise the matrix using Jacobi
-  A = Jacobi(A, epsilon, max_iterations);
+  A = Jacobi(A, 1e-8, max_iterations);
   
   // Define a vector for the numerical eigenvalues
   vec eigenvalues(N-1);
