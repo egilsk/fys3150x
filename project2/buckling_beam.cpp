@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
   auto finish = high_resolution_clock::now();
   duration<double> time_used = finish - start;
 
-  cout << "Time used by Armadillo: " << time_used.count() << endl;
+  printf("Time used by Armadillo: %.3e\n",time_used.count());
 
   // Diagonalise the matrix using Jacobi
   A = Jacobi(A, 1e-8, max_iterations);
@@ -59,10 +59,11 @@ int main(int argc, char *argv[]){
   // Sort the eigenvalues
   eigenvalues = sort(eigenvalues);
 
-  // Print the numerical and analytical eigenvalues
-  printf("Analytical    Armadillo    Numerical\n");
+  // Print the numerical and analytical eigenvalues and the relative error
+  printf("Analytical    Numerical    Relative error\n");
   for (int i = 0; i <= N-2; i++){
-    printf("%10.5f   %10.5f   %10.5f\n", eigenvalues_analytic(i), eigenvalues_arma(i), eigenvalues(i));
+    double error = fabs((eigenvalues_analytic(i) - eigenvalues(i))/eigenvalues_analytic(i));
+    printf("%10.5f   %10.5f   %.3e\n", eigenvalues_analytic(i), eigenvalues(i), error);
   }
 
   return 0;

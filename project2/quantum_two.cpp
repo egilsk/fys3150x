@@ -37,8 +37,7 @@ int main(int argc, char *argv[]){
   // Finding eigenvalues using Armadillo
   vec eigenvalues_arma(N-1);
   eig_sym(eigenvalues_arma, A);
-
-
+  /*
   // Diagonalise the matrix using Jacobi
   A = Jacobi(A, 1e-8, max_iterations);
   
@@ -50,11 +49,11 @@ int main(int argc, char *argv[]){
   }
   // Sort the eigenvalues
   eigenvalues = sort(eigenvalues);
-
+  */
   // Compare our results with Armadillo
   printf("Armadillo    Numerical\n");
-  for (int i = 0; i <= N-2; i++){
-    printf("%10.4f   %10.4f\n", eigenvalues_arma(i), eigenvalues(i));
+  for (int i = 0; i <= 4; i++){
+    printf("%10.4f\n", eigenvalues_arma(i));
   }
 
   return 0;

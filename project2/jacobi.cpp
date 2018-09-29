@@ -92,7 +92,7 @@ mat Jacobi(mat A, double epsilon, int max_iterations){
   duration<double> time_used = finish - start;
   
   // Print the number of iterations and time used
-  cout << "Number of iterations: " << iterations << endl;
-  cout << "Time used by Jacobi: " << time_used.count() << endl;
+  printf("Number of iterations: %d\n", iterations);
+  printf("Time used by Jacobi: %.3e\n", time_used.count());
   return A;
 }
