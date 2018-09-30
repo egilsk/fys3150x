@@ -2,7 +2,7 @@ CPPflags = c++ -std=c++11
 
 LIB = -larmadillo
 
-# Test of function
+# Test of functions
 
 test :	  		test.o jacobi.o
 				${CPPflags} test.o jacobi.o ${LIB} -o test.exe
