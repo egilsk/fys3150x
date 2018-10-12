@@ -2,14 +2,24 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cstdlib>
 
 using namespace std;
 
 int main(int argc, char *argv[]){
+    // Declare the number of steps and the final time
+  int n; double T;
+    // Read the number of steps and the final time
+    if( argc <= 2 ){
+      cout << "Error: " << argv[0] << " reads the number of steps and the final time" << endl;
+      exit(1);
+    }
+    else{
+      n = atoi(argv[1]);
+      T = atof(argv[2]);
+    }
 
-  // Define number of steps, total time and step size h 
-  int n = 1000;
-  double T = 10.0;
+  // Define the step size
   double h = T/n;
 
   // Define pi
@@ -17,7 +27,7 @@ int main(int argc, char *argv[]){
   // Calculate constant
   double four_pi2_h = 4*pi*pi*h;
 
-  // Initalize the time, position, and velocity
+  // Initialize the time, position, and velocity
   double t = 0.0;
   double x = 1.0; double y = 0.0; double r = sqrt(x*x + y*y);
   double v_x = 0.0; double v_y = 2*pi;
@@ -27,7 +37,7 @@ int main(int argc, char *argv[]){
   ofile.open("earth_sun_euler.dat");
   // Write out the number of points, and the first point
   ofile << setiosflags(ios::showpoint | ios::scientific);
-  ofile << "Number of steps: " << n + 1 << endl;
+  ofile << "Number of points: " << n + 1 << endl;
   ofile << "  Time            " << "x-coordinate    " << "y-coordinate    " << "velocity (x)    " << "velocity (y)" << endl;
   ofile << setw(16) << setprecision(8) << t;
   ofile << setw(16) << setprecision(8) << x;
