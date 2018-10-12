@@ -1,5 +1,7 @@
 import sys
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import re
@@ -50,11 +52,6 @@ for i in range(1,n):
 # Interactive mode off
 plt.ioff()
 
-"""
-
-
-
-"""
 # Plot the results
 plt.plot(data[:,1], data[:,2], label = datafile.split("_")[-1])
 plt.xlabel("x")
@@ -63,3 +60,25 @@ plt.axis("equal")
 plt.legend()
 plt.savefig(datafile + ".png")
 """
+
+
+def update(num, data, line):
+    line.set_data(data[..., :num])
+    return line,
+
+# Set up formatting for the movie files
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
+fig1 = plt.figure()
+
+data = np.array((data[:,1], data[:,2]))
+l, = plt.plot([], [], '--')
+plt.xlim(-2, 2)
+plt.ylim(-2, 2)
+plt.xlabel('x [AU]')
+plt.ylabel('y [AU]')
+plt.title('Solar system')
+ani = animation.FuncAnimation(fig1, update, n, fargs=(data, l),
+                                   interval=50, blit=True)
+ani.save('solar_system.mp4', writer=writer)
