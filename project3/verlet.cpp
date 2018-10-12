@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
   // Initalize the time, position, and velocity
   double t = 0.0;
   double x = 1.0; double y = 0.0; double r = sqrt(x*x + y*y);
-  double v_x = 0.0; double v_y = 2*pi;
+  double v_x = 0.0; double v_y = pi;
 
   // Declare and open outputfile
   ofstream ofile;

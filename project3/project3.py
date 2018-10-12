@@ -21,7 +21,7 @@ with open(datafile + ".dat", 'r') as infile:
     infile.readline()
     for i in range(n):
         data[i] = infile.readline().split()
-
+"""
 # Interactive mode on
 plt.ion()
 
@@ -50,8 +50,11 @@ for i in range(1,n):
 # Interactive mode off
 plt.ioff()
 
+"""
 
 
+
+"""
 # Plot the results
 plt.plot(data[:,1], data[:,2], label = datafile.split("_")[-1])
 plt.xlabel("x")
@@ -59,3 +62,4 @@ plt.ylabel("y")
 plt.axis("equal")
 plt.legend()
 plt.savefig(datafile + ".png")
+"""
