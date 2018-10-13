@@ -2,9 +2,10 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import re
-#import matplotlib
-#matplotlib.use("Agg")
+
+#-----------------------------------------------------------------------------
+
+# COLLECT DATA
 
 # Read the name of the input data file from the command line
 if len(sys.argv) <= 1:
@@ -18,7 +19,7 @@ with open(datafile + ".dat", 'r') as infile:
     # Read the number of points
     n = int(infile.readline().split()[-1])
     # Define an array which stores the data
-    data = np.zeros((n,6))
+    data = np.zeros((n,5))
     # Read the data
     infile.readline()
     for i in range(n):
@@ -26,53 +27,58 @@ with open(datafile + ".dat", 'r') as infile:
 
 #----------------------------------------------------------------------------
 
-# Plot
+# PLOT
 
+# Create a figure, and set it up
 fig1 = plt.figure()
-plt.plot(data[:,1], data[:,2], label = datafile.split("_")[-1])
-plt.plot(0,0,'yo', markersize=12)
-plt.xlabel("x")
-plt.ylabel("y")
 plt.axis("equal")
+plt.xlabel("x [AU]")
+plt.ylabel("y [AU]")
+plt.title(" Solar system (" + datafile.split("_")[-1] + ")")
+
+# Plot the position of the sun and the planets
+plt.plot(data[:,1], data[:,2], label="Earth")
+plt.plot(0, 0, 'yo', markersize=12, label="Sun" )
 plt.legend()
+
+# Save the plot
 plt.savefig(datafile + ".png")
-plt.show()
+plt.close()
 
 #----------------------------------------------------------------------------
-"""
-# Animation
 
-# Define animate function
-def animate(n, data, line):
-    line.set_data(data[..., :n])
-    return line,
+# ANIMATION
 
-# Collect x- and y-values
-data = np.array((data[:,1], data[:,2]))
-
-# Create figure
+# Create a figure and an axis, and set it up
 fig2 = plt.figure()
-plt.axis("equal")
-plt.xlim(-2, 2)
-plt.ylim(-2, 2)
-plt.xlabel('x [AU]')
-plt.ylabel('y [AU]')
-plt.title('Solar system')
+ax = plt.axes(aspect="equal", xlim=(-2, 2), ylim=(-2, 2),
+                title="Solar System", xlabel="x [AU]", ylabel="y [AU]")
+ax.grid()
 
-# Initialise the plot
-line, = plt.plot([], [], '--')
+# Initialize the orbits and the timing
+sun, = ax.plot(0,0, "yo", ms=12)
+orbit, = ax.plot([], [], "--", lw=1)
+planet, = ax.plot([], [], "o", ms=2)
+time_text = ax.text(0.05, 0.9, "", transform=ax.transAxes)
+
+# Define the init-function, which draws a clear frame
+def init():
+    orbit.set_data([], [])
+    planet.set_data([], [])
+    time_text.set_text("")
+    return orbit, planet, time_text
+
+# Define the animate-function, which is called at each frame
+def animate(i):
+    orbit.set_data(data[:i,1], data[:i,2])
+    planet.set_data(data[i,1], data[i,2])
+    time_text.set_text("%.1f years" % data[i,0])
+    return orbit, planet, time_text
 
 # Run the animation
-ani = animation.FuncAnimation(fig2, animate, n, fargs=(data, line),
-                                   interval=50, blit=True)
-
+ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
+                                init_func=init, interval=25, blit=True)
 plt.show()
 
-# Set up formatting for the movie file
-Writer = animation.writers['ffmpeg']
-writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
-
-# Save the animation as mp4 file
-ani.save('solar_system.mp4', writer=writer)
-
-"""
+# Save the animation
+#ani.save('earth.mp4')
