@@ -20,13 +20,13 @@ int main(int argc, char *argv[]){
 
   // Initialise Earth
   double mass_earth = 6.0e24;
-  double x_earth = 1.0; double y_earth = 0.0;
-  double vx_earth = 0.0; double vy_earth = 2.0*pi;
+  double x_earth = 0.929; double y_earth = 0.37;
+  double vx_earth = -6.55e-3*365; double vy_earth = 1.596e-2*365;
 
   // Initialise Jupiter
   double mass_jupiter = 1.9e27;
-  double x_jupiter = 5.2; double y_jupiter = 0.0;
-  double vx_jupiter = 0.0; double vy_jupiter = 2.0*pi*x_jupiter/12;
+  double x_jupiter = -2.65; double y_jupiter = -4.66;
+  double vx_jupiter = 6.467e-3*365; double vy_jupiter = -3.37e-3*365;
 
   Verlet(n, T, mass_earth, x_earth, y_earth, vx_earth, vy_earth, mass_jupiter, x_jupiter, y_jupiter, vx_jupiter, vy_jupiter);
 

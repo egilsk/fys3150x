@@ -67,7 +67,7 @@ earth, = ax.plot([], [], "bo", ms=4, label="Earth")
 jupiter_orbit, = ax.plot([], [], "--", lw=1)
 jupiter, = ax.plot([], [], "ro", ms=8, label="Jupiter")
 
-time_text = ax.text(0.05, 0.9, "", transform=ax.transAxes)
+time_text = ax.text(0.05, 0.95, "", transform=ax.transAxes)
 
 # Define the init-function, which draws a clear frame
 def init():
@@ -90,7 +90,7 @@ def animate(i):
 
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
-                                init_func=init, interval=50, blit=True)
+                                init_func=init, interval=10, blit=True)
 plt.show()
 
 # Save the animation
