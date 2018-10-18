@@ -6,8 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
-
-using namespace std;
+#include <string>
 
 void  Verlet(int, double, double, double, double, double, double, double, double, double, double, double);
 

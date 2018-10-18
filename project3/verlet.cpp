@@ -1,10 +1,3 @@
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-#include <string>
-
 #include "verlet.h"
 
 using namespace std;
@@ -23,7 +16,7 @@ void Verlet(int n, double T, double m_e, double x_e, double y_e, double vx_e, do
 
   // Initialise time
   double t = 0.0;
-  // Calculate the initial velocities and distances
+  // Calculate the initial speeds and distances
   double v_e = sqrt(vx_e*vx_e + vy_e*vy_e);
   double r_e = sqrt(x_e*x_e + y_e*y_e);
   double v_j = sqrt(vx_j*vx_j + vy_j*vy_j);
@@ -38,8 +31,8 @@ void Verlet(int n, double T, double m_e, double x_e, double y_e, double vx_e, do
   ofile << "Number of points: " << n + 1 << endl;
   ofile << "  Earth:";
   ofile << setw(114) << "Jupiter:" << endl;
-  ofile << "  Time            " << "x-coordinate    " << "y-coordinate    " << "distance        " << "velocity (x)    " << "velocity (y)    " << "velocity        ";
-  ofile << "x-coordinate    " << "y-coordinate    " << "distance        " << "velocity (x)    " << "velocity (y)    " << "velocity        " << endl;
+  ofile << "  Time            " << "Position_(x)    " << "Position_(y)    " << "Distance        " << "Velocity_(x)    " << "Velocity_(y)    " << "Speed           ";
+  ofile << "Position_(x)    " << "Position_(y)    " << "Distance        " << "Velocity_(x)    " << "Velocity_(y)    " << "Speed           " << endl;
   ofile << setw(16) << setprecision(8) << t;
   ofile << setw(16) << setprecision(8) << x_e;
   ofile << setw(16) << setprecision(8) << y_e;

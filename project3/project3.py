@@ -18,13 +18,15 @@ else:
 # Open input data file and read in the results
 with open(datafile + ".dat", 'r') as infile:
     # Read the number of points
-    n = int(infile.readline().split()[-1])
+    n_points = int(infile.readline().split()[-1])
+    # Skip empty line / read the names of the planets
+    infile.readline()
+    # Read the number of columns
+    n_columns = len(infile.readline().split())
     # Define an array which stores the data
-    data = np.zeros((n,13))
+    data = np.zeros((n_points,n_columns))
     # Read the data
-    infile.readline()
-    infile.readline()
-    for i in range(n):
+    for i in range(n_points):
         data[i] = infile.readline().split()
 
 #----------------------------------------------------------------------------
@@ -36,13 +38,13 @@ fig1 = plt.figure()
 plt.axis("equal")
 plt.xlabel("x [AU]")
 plt.ylabel("y [AU]")
-plt.title(" Solar system ")
+plt.title("Solar system")
 
 # Plot the position of the sun and the planets
 plt.plot(data[:,1], data[:,2], label="Earth")
 plt.plot(data[:,7], data[:,8], label="Jupiter")
-plt.plot(0, 0, 'yo', markersize=12, label="Sun" )
-mpl.rcParams['legend.numpoints'] = 1
+plt.plot(0, 0, "yo", ms=12, label="Sun")
+mpl.rcParams["legend.numpoints"] = 1
 plt.legend()
 
 # Save the plot
@@ -58,7 +60,7 @@ fig2 = plt.figure()
 ax = plt.axes(aspect="equal", xlim=(-10, 10), ylim=(-10, 10),
                 title="Solar System", xlabel="x [AU]", ylabel="y [AU]")
 ax.grid()
-mpl.rcParams['legend.numpoints'] = 1
+mpl.rcParams["legend.numpoints"] = 1
 
 # Initialize the orbits and the timing
 sun, = ax.plot(0,0, "yo", ms=12, label="Sun")
