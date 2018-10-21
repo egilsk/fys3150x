@@ -2,6 +2,10 @@
 #define SYSTEM_H
 
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cstdlib>
 
 #include "celestialbody.h"
 
@@ -26,6 +30,12 @@ class System {
   // Reset the forces on the objects
   void resetForces();
 
+  // Initialise and create header for an output file
+  void header(ofstream& ofile, int);
+  
+  // Write the position of the objects to file
+  void output(ofstream& ofile, double);
+  
 };
 
 #endif // SYSTEM_H

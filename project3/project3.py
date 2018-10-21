@@ -10,17 +10,17 @@ import matplotlib.animation as animation
 
 # Read the name of the input data file from the command line
 if len(sys.argv) <= 1:
-    print "Error:", sys.argv[0], "reads the name of the input file (without .dat)"
+    print "Error:", sys.argv[0], "reads the name of the input file"
     exit(1)
 else:
     datafile = sys.argv[1]
 
 # Open input data file and read in the results
-with open(datafile + ".dat", 'r') as infile:
+with open(datafile, 'r') as infile:
     # Read the number of points
     n_points = int(infile.readline().split()[-1])
-    # Skip empty line / read the names of the planets
-    infile.readline()
+    # Read the names of the bodies
+    names = infile.readline().replace(":","").split()
     # Read the number of columns
     n_columns = len(infile.readline().split())
     # Define an array which stores the data
@@ -41,14 +41,17 @@ plt.ylabel("y [AU]")
 plt.title("Solar system")
 
 # Plot the position of the sun and the planets
-plt.plot(data[:,1], data[:,2], label="Earth")
-plt.plot(data[:,7], data[:,8], label="Jupiter")
-plt.plot(0, 0, "yo", ms=12, label="Sun")
+i = 1
+for name in names:
+    plt.plot(data[:,i], data[:,i+1], label=name)
+    i += 3
+
+# Set up the legend
 mpl.rcParams["legend.numpoints"] = 1
-plt.legend()
+plt.legend(loc="best", fontsize="xx-small")
 
 # Save the plot
-plt.savefig(datafile + ".png")
+plt.savefig(datafile.replace(".dat",".png"))
 plt.close()
 
 #----------------------------------------------------------------------------
@@ -57,38 +60,36 @@ plt.close()
 
 # Create a figure and an axis, and set it up
 fig2 = plt.figure()
-ax = plt.axes(aspect="equal", xlim=(-10, 10), ylim=(-10, 10),
+ax = plt.axes(aspect="equal", xlim=(-50, 50), ylim=(-50, 50),
                 title="Solar System", xlabel="x [AU]", ylabel="y [AU]")
 ax.grid()
 mpl.rcParams["legend.numpoints"] = 1
 
-# Initialize the orbits and the timing
-sun, = ax.plot(0,0, "yo", ms=12, label="Sun")
-earth_orbit, = ax.plot([], [], "--", lw=1)
-earth, = ax.plot([], [], "bo", ms=4, label="Earth")
-jupiter_orbit, = ax.plot([], [], "--", lw=1)
-jupiter, = ax.plot([], [], "ro", ms=8, label="Jupiter")
+# Initialise the orbits and the timing
+
+orbits = []
+for name in names:
+    orbit, = ax.plot([], [], "-", lw=1, label=name)
+    orbits.append(orbit)
 
 time_text = ax.text(0.05, 0.95, "", transform=ax.transAxes)
 
 # Define the init-function, which draws a clear frame
 def init():
-    earth_orbit.set_data([], [])
-    earth.set_data([], [])
-    jupiter_orbit.set_data([], [])
-    jupiter.set_data([], [])
+    for j in range(len(names)):
+        orbits[j].set_data([], [])
     time_text.set_text("")
-    return earth_orbit, earth, jupiter_orbit, jupiter, time_text
+    return tuple(orbits) + (time_text,)
 
 # Define the animate-function, which is called at each frame
 def animate(i):
-    earth_orbit.set_data(data[:i,1], data[:i,2])
-    earth.set_data(data[i,1], data[i,2])
-    jupiter_orbit.set_data(data[:i,7], data[:i,8])
-    jupiter.set_data(data[i,7], data[i,8])
+    k = 1
+    for j in range(len(names)):
+        orbits[j].set_data(data[:i,k], data[:i,k+1])
+        k += 3
     time_text.set_text("%.1f years" % data[i,0])
-    ax.legend()
-    return earth_orbit, earth, jupiter_orbit, jupiter, time_text
+    ax.legend(loc="best", fontsize="xx-small")
+    return tuple(orbits) + (time_text,)
 
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),

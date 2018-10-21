@@ -8,7 +8,7 @@ void ForwardEuler::integrate(System* system, const double h)
     
     velocity_temp = object->getVelocity() + object->force/object->getMass()*h;
 
-    object->setPosition(object->getPosition() +  velocity_temp*h);    
+    object->setPosition(object->getPosition() +  object->getVelocity()*h);    
     
     object->setVelocity(velocity_temp);
     
