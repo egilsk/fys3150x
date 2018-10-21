@@ -2,7 +2,7 @@
 
 void System::resetForces()
 {
-  for (CelestialBody* object : bodies) { object->force = {0,0,0}; }
+  for (CelestialBody* object : bodies) { object->setForce({0,0,0}); }
 }
 
 void System::header(ofstream& ofile, int n)

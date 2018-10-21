@@ -5,6 +5,7 @@
 #include "system.h"
 #include "gravity.h"
 #include "forward_euler.h"
+#include "verlet.h"
 
 using namespace std;
 
@@ -33,53 +34,53 @@ int main (int argc, char* argv[]){
   double t = 0.0;
   
   // Initialise the Sun
-  vec3 r_sun(0,0,0);
-  vec3 v_sun(0,0,0);
-  double mass_sun = 2.0e30;
+  vec3 r_sun(-6.28e-3, 5.98e-3, 1.46e-4);
+  vec3 v_sun = vec3(-6.16e-6, -5.57e-6, 1.79e-7)*365;
+  double mass_sun = 1.99e30;
 
   // Initialise Mercury
-  vec3 r_mercury(0.39,0,0);
-  vec3 v_mercury(0,2.0*pi*r_mercury.x()*365/88,0);
-  double mass_mercury = 3.3e23;
+  vec3 r_mercury(-3.96e-1, -1.06e-2, 3.45e-2);
+  vec3 v_mercury = vec3(-4.66e-3, -2.69e-2, -1.77e-3)*365;
+  double mass_mercury = 3.30e23;
 
   // Initialise Venus
-  vec3 r_venus(0.72,0,0);
-  vec3 v_venus(0,2.0*pi*r_venus.x()*365/225,0);
-  double mass_venus = 4.9e24;
+  vec3 r_venus(-1.97e-1, -6.94e-1, 1.61e-3);
+  vec3 v_venus = vec3(1.94e-2, -5.41e-3, -1.19e-3)*365;
+  double mass_venus = 4.87e24;
 
   // Initialise Earth
-  vec3 r_earth(1.0, 0, 0);
-  vec3 v_earth(0, 2.0*pi, 0);
-  double mass_earth = 6.0e24;
+  vec3 r_earth(-4.68e-1, 8.75e-1, 1.54e-4);
+  vec3 v_earth = vec3(-1.55e-2, -8.15e-3, 4.84e-7)*365;
+  double mass_earth = 5.97e24;
 
   // Initialise Mars
-  vec3 r_mars(1.52,0,0);
-  vec3 v_mars(0,2.0*pi*r_mars.x()*365/687,0);
-  double mass_mars = 6.6e23;
+  vec3 r_mars(-1.47, 8.07e-1, 5.28e-2);
+  vec3 v_mars = vec3(-6.21e-3, -1.11e-2, -7.93e-5)*365;
+  double mass_mars = 6.42e23;
 
   // Initialise Jupiter
-  vec3 r_jupiter(5.2, 0, 0);
-  vec3 v_jupiter(0, 2.0*pi*r_jupiter.x()/12, 0);
-  double mass_jupiter = 1.9e27;
+  vec3 r_jupiter(2.51, -4.46, -3.78e-2);
+  vec3 v_jupiter = vec3(6.47e-3, 4.06e-3, -1.62e-4)*365;
+  double mass_jupiter = 1.90e27;
 
   // Initialise Saturn
-  vec3 r_saturn(9.54,0,0);
-  vec3 v_saturn(0,2.0*pi*r_saturn.x()/29,0);
-  double mass_saturn = 5.5e26;
+  vec3 r_saturn(9.36, 1.30, -3.95e-1);
+  vec3 v_saturn = vec3(-1.06e-3, 5.52e-3, -5.38e-5)*365;
+  double mass_saturn = 5.68e26;
 
   // Initialise Uranus
-  vec3 r_uranus(19.19,0,0);
-  vec3 v_uranus(0,2.0*pi*r_uranus.x()/84,0);
-  double mass_uranus = 8.8e25;
+  vec3 r_uranus(1.12e1, -1.63e1, -2.06e-1);
+  vec3 v_uranus = vec3(3.21e-3, 2.05e-3, -3.40e-5)*365;
+  double mass_uranus = 8.68e25;
 
   // Initialise Neptun
-  vec3 r_neptun(30.06,0,0);
-  vec3 v_neptun(0,2.0*pi*r_neptun.x()/165,0);
-  double mass_neptun = 1.03e26;
+  vec3 r_neptun(1.39e1, -2.67e1, 2.30e-1);
+  vec3 v_neptun = vec3(2.76e-3, 1.47e-3, -9.38e-5)*365;
+  double mass_neptun = 1.02e26;
 
   // Initialise Pluto
-  vec3 r_pluto(39.53,0,0);
-  vec3 v_pluto(0,2.0*pi*r_pluto.x()/248,0);
+  vec3 r_pluto(-1.31e1, -2.61e1, 6.58);
+  vec3 v_pluto = vec3(2.90e-3, -1.87e-3, -6.52e-4)*365;
   double mass_pluto = 1.31e22;
 
   // Initialise the system
@@ -117,13 +118,15 @@ int main (int argc, char* argv[]){
 
   // Initialise the force and the solver
   Gravity F(four_pi2, mass_sun);
-  ForwardEuler solver;
+  Verlet solver;
+
+  // Calculate the initial force (Verlet)
+  //F.forces(&S);
 
   // Run the calculations
   while (t < T) {
-    S.resetForces();
-    F.forces(&S);
-    solver.integrate(&S, h);
+
+    solver.integrate(&S, &F, h);
     t += h;
 
     S.output(ofile, t);

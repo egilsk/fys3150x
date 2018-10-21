@@ -23,10 +23,10 @@ void Gravity::forces(System* system)
       
       // Calculate the force from object j on i
       force = r_vec * (-m_G) * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_solar_mass*r*r*r);
-      system->bodies[i]->force += force;
+      system->bodies[i]->setForce(system->bodies[i]->getForce() + force);
       
       // Use N3L to calculate the force from object i on j
-      system->bodies[j]->force -= force;
+      system->bodies[j]->setForce(system->bodies[j]->getForce() - force);
       
     }
   }

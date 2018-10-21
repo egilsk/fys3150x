@@ -1,13 +1,22 @@
 #ifndef VERLET_H
 #define	VERLET_H
 
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-#include <string>
+#include "system.h"
+#include "gravity.h"
 
-void  Verlet(int, double, double, double, double, double, double, double, double, double, double, double);
+class Verlet
+{
+  
+ public:
+  
+  // Constructor
+  Verlet() {}
+  
+  // Destructor
+  ~Verlet() {}
+  
+  void integrate(System* system, Gravity* gravity, const double h);
+  
+};
 
 #endif // VERLET_H
