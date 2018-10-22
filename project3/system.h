@@ -30,6 +30,9 @@ class System {
   // Reset the forces on the objects
   void resetForces();
 
+  // Reset the potential energy of the objects
+  void resetPotential();
+
   // Initialise and create header for an output file
   void header(ofstream& ofile, int);
   

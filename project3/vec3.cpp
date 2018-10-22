@@ -54,6 +54,16 @@ void vec3::print(string msg)
     print();
 }
 
+vec3 vec3::cross(vec3 other)
+{
+    return vec3(v[1]*other.z() - v[2]*other.y(), v[2]*other.x() - v[0]*other.z(), v[0]*other.y() - v[1]*other.x());
+}
+
+double vec3::dot(vec3 other)
+{
+    return other[0]*v[0] + other[1]*v[1] + other[2]*v[2];
+}
+
 
 double vec3::length() const
 {

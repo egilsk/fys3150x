@@ -5,7 +5,7 @@
 #include "system.h"
 #include "gravity.h"
 #include "forward_euler.h"
-#include "verlet.h"
+#include "velocity_verlet.h"
 
 using namespace std;
 
@@ -118,17 +118,22 @@ int main (int argc, char* argv[]){
 
   // Initialise the force and the solver
   Gravity F(four_pi2, mass_sun);
-  Verlet solver;
+  VelocityVerlet solver;
 
   // Calculate the initial force (Verlet)
-  //F.forces(&S);
+  F.forces(&S);
+  // Calculate the constant h/(mass*2) (Verlet)
+  vector<double> h_mass_two;
+  for (int i = 0; i < S.bodies.size(); i++) {
+    h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
+  }
 
   // Run the calculations
   while (t < T) {
 
-    solver.integrate(&S, &F, h);
+    solver.integrate(&S, &F, h, h_mass_two);
     t += h;
-
+    
     S.output(ofile, t);
   }
 

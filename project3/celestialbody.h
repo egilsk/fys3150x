@@ -12,11 +12,11 @@ class CelestialBody {
   vec3 m_position;
   vec3 m_velocity;
   double m_mass;
-
+  
   vec3 m_force;
   double m_kinetic_energy;
   double m_potential_energy;
-  double m_angular_momentum;
+  vec3 m_angular_momentum;
   
  public:
   
@@ -34,7 +34,7 @@ class CelestialBody {
   vec3 getForce() { return m_force; }
   double getKinetic_energy() { return m_kinetic_energy; }
   double getPotential_energy() { return m_potential_energy; }
-  double getAngular_momentum() { return m_angular_momentum; }
+  vec3 getAngular_momentum() { return m_angular_momentum; }
   
   // Setters
   void setName(string name) { m_name = name; }
@@ -42,9 +42,10 @@ class CelestialBody {
   void setVelocity(vec3 velocity) { m_velocity = velocity; }
   void setMass(double mass) { m_mass = mass; }
   void setForce(vec3 force) { m_force = force; }
-  void setKinetic_energy(double kinetic_energy) { m_kinetic_energy = kinetic_energy; }
   void setPotential_energy(double potential_energy) { m_potential_energy = potential_energy; }
-  void setAngular_momentum(double angular_momentum) { m_angular_momentum = angular_momentum; }
+
+  void setKinetic_energy() { m_kinetic_energy = 0.5*m_mass*m_velocity.lengthSquared(); }
+  void setAngular_momentum() { m_angular_momentum = m_position.cross(m_velocity)*m_mass; }
 
   // Print function
   void print();

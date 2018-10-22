@@ -1,7 +1,7 @@
 CPPflags = c++ -std=c++11
 
-main:		main.o vec3.o celestialbody.o system.o gravity.o forward_euler.o verlet.o
-				${CPPflags} main.o vec3.o celestialbody.o system.o gravity.o forward_euler.o verlet.o -o main.exe
+main:		main.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o
+				${CPPflags} main.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o -o main.exe
 
 main.o:		main.cpp 
 		        	${CPPflags} -c main.cpp
@@ -21,13 +21,13 @@ gravity.o :	gravity.cpp
 forward_euler.o:	forward_euler.cpp
 					${CPPflags} -c forward_euler.cpp
 
-verlet.o:	verlet.cpp
-				${CPPflags} -c verlet.cpp
+velocity_verlet.o:	velocity_verlet.cpp
+				${CPPflags} -c velocity_verlet.cpp
 
 
 
-sandbox:	sandbox.o
-				${CPPflags} sandbox.o -o sandbox.exe
+sandbox:	sandbox.o vec3.o
+				${CPPflags} sandbox.o vec3.o -o sandbox.exe
 
 sandbox.o:	sandbox.cpp
 				${CPPflags} -c sandbox.cpp

@@ -5,6 +5,11 @@ void System::resetForces()
   for (CelestialBody* object : bodies) { object->setForce({0,0,0}); }
 }
 
+void System::resetPotential()
+{
+  for (CelestialBody* object : bodies) { object->setPotential_energy(0); }
+}
+
 void System::header(ofstream& ofile, int n)
 {
   ofile << setiosflags(ios::showpoint | ios::scientific | ios::left);

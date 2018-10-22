@@ -46,6 +46,10 @@ public:
     // Note: The const after the function name ensures that we
     // cannot modify the returns value, only read it.
 
+    // Cross and dot product
+    vec3 cross(vec3 other);
+    double dot(vec3 other);
+
     // Length
     double length() const;
     double lengthSquared() const;

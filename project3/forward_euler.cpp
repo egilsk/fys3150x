@@ -2,12 +2,11 @@
 
 void ForwardEuler::integrate(System* system, Gravity* gravity, const double h)
 {
-  vec3 velocity_temp(0,0,0);
-
-  // Reset forces
+  // Reset and update forces
   system->resetForces();
-  // Calculate forces
   gravity->forces(system);
+
+  vec3 velocity_temp(0,0,0);
   
   for (CelestialBody* object : system->bodies) {
     

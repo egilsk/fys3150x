@@ -22,6 +22,9 @@ class Gravity
   // Calculate the gravitational forces between the objects in the system
   void forces(System* system);
   
+  // Calculate the potential energy of the objects in the system
+  void potential(System* system);
+  
 };
 
 #endif // GRAVITY_H
