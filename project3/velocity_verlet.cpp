@@ -2,9 +2,8 @@
 
 using namespace std;
 
-void VelocityVerlet::integrate(System* system, Gravity* gravity, const double h, const vector<double> h_mass_two)
+vector<vec3> VelocityVerlet::storeForces(System* system)
 {
-  // Store the old forces 
   vector<vec3> forces_temp;
   
   for (int i = 0; i < system->bodies.size(); i++) {
@@ -13,17 +12,23 @@ void VelocityVerlet::integrate(System* system, Gravity* gravity, const double h,
     
   }
 
+  return forces_temp;
+}
+
+void VelocityVerlet::updatePosition(System* system, const double h, const vector<double> h_mass_two)
+{
+
+
   // Update the position
   for (int i = 0; i < system->bodies.size(); i++) {
     
     system->bodies[i]->setPosition( system->bodies[i]->getPosition() + system->bodies[i]->getVelocity()*h + system->bodies[i]->getForce()*h*h_mass_two[i] );
     
   }
-  
-  // Reset and update forces
-  system->resetForces();
-  gravity->forces(system);
-  
+}
+
+void VelocityVerlet::updateVelocity(System* system, const double h, const vector<double> h_mass_two, vector<vec3> forces_temp)
+{
   // Update the velocity
   for (int i = 0; i < system->bodies.size(); i++) {  
     

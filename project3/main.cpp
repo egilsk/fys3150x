@@ -3,8 +3,7 @@
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"
-#include "newtonian_gravity.h"
-#include "relativistic_gravity.h"
+#include "gravity.h"
 #include "forward_euler.h"
 #include "velocity_verlet.h"
 
@@ -99,15 +98,15 @@ int main (int argc, char* argv[]){
   CelestialBody* pluto = new CelestialBody("Pluto", r_pluto, v_pluto, mass_pluto);  
 
   S.addObject(sun);
-  S.addObject(mercury);
-  S.addObject(venus);
+  //S.addObject(mercury);
+  //S.addObject(venus);
   S.addObject(earth);
-  S.addObject(mars);
+  //S.addObject(mars);
   S.addObject(jupiter);
-  S.addObject(saturn);
-  S.addObject(uranus);
-  S.addObject(neptun);
-  S.addObject(pluto);
+  //S.addObject(saturn);
+  //S.addObject(uranus);
+  //S.addObject(neptun);
+  //S.addObject(pluto);
   
   // Declare and open output file
   ofstream ofile;
@@ -123,22 +122,40 @@ int main (int argc, char* argv[]){
 
   // Calculate the initial force (Verlet)
   F.newtonianForces(&S);
+
   // Calculate the constant h/(mass*2) (Verlet)
   vector<double> h_mass_two;
   for (int i = 0; i < S.bodies.size(); i++) {
     h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
   }
 
+  // Declare a vector storing the forces (Verlet)
+  vector<vec3> forces_temp;
+
   // Run the calculations
   while (t < T) {
-
-    solver.integrate(&S, &F, h, h_mass_two);
-    t += h;
     
+    // Store current forces
+    forces_temp = solver.storeForces(&S);
+
+    // Update position
+    solver.updatePosition(&S, h, h_mass_two);
+    
+    // Update forces
+    S.resetForces();
+    F.newtonianForces(&S);
+    
+    // Update velocity
+    solver.updateVelocity(&S, h, h_mass_two, forces_temp);
+    
+    // Update time
+    t += h;
+
+    // Write to file
     S.output(ofile, t);
   }
-
+  
   ofile.close();
-
+  
   return 0;
 }

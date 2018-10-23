@@ -1,10 +1,10 @@
-CPPflags = c++ -pg -O3 -std=c++11
+CPPflags = c++ -std=c++11
 
-main:		main.o vec3.o celestialbody.o system.o newtonian_gravity.o relativistic_gravity.o forward_euler.o velocity_verlet.o
-				${CPPflags} main.o vec3.o celestialbody.o system.o  newtonian_gravity.o relativistic_gravity.o forward_euler.o velocity_verlet.o -o main.exe
+main:		main.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o
+				${CPPflags} main.o vec3.o celestialbody.o system.o  gravity.o forward_euler.o velocity_verlet.o -o main.exe
 
-mercury:	mercury_precession.o vec3.o celestialbody.o system.o newtonian_gravity.o relativistic_gravity.o velocity_verlet.o
-				${CPPflags} mercury_precession.o vec3.o celestialbody.o system.o newtonian_gravity.o relativistic_gravity.o velocity_verlet.o -o mercury_precession.exe
+mercury:	mercury_precession.o vec3.o celestialbody.o system.o gravity.o velocity_verlet.o
+				${CPPflags} mercury_precession.o vec3.o celestialbody.o system.o gravity.o velocity_verlet.o -o mercury_precession.exe
 
 main.o:		main.cpp 
 		        	${CPPflags} -c main.cpp
@@ -21,11 +21,8 @@ celestialbody.o :	 celestialbody.cpp
 system.o :	system.cpp
 				${CPPflags} -c system.cpp
 
-newtonian_gravity.o :	newtonian_gravity.cpp
-				${CPPflags} -c newtonian_gravity.cpp
-
-relativistic_gravity.o :	relativistic_gravity.cpp
-				${CPPflags} -c relativistic_gravity.cpp
+gravity.o :	gravity.cpp
+				${CPPflags} -c gravity.cpp
 
 forward_euler.o:	forward_euler.cpp
 					${CPPflags} -c forward_euler.cpp
@@ -35,8 +32,8 @@ velocity_verlet.o:	velocity_verlet.cpp
 
 
 
-sandbox:	sandbox.o vec3.o
-				${CPPflags} sandbox.o vec3.o -o sandbox.exe
+sandbox:	sandbox.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o
+				${CPPflags} sandbox.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o -o sandbox.exe
 
 sandbox.o:	sandbox.cpp
 				${CPPflags} -c sandbox.cpp

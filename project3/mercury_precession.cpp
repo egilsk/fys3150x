@@ -3,8 +3,7 @@
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"
-#include "newtonian_gravity.h"
-#include "relativistic_gravity.h"
+#include "gravity.h"
 #include "velocity_verlet.h"
 
 using namespace std;
@@ -61,8 +60,8 @@ int main (int argc, char* argv[]) {
   ofile.open("mercury.dat");
   
   // Create header and write out the starting positions
-  S.header(ofile, n);
-  S.output(ofile, t);
+  //S.header(ofile, n);
+  //S.output(ofile, t);
 
   // Initialise the force and the solver
   Gravity F(four_pi2, mass_sun, c);
@@ -70,39 +69,72 @@ int main (int argc, char* argv[]) {
 
   // Calculate the initial force
   F.relativisticForces(&S);
-  // Calculate the constant h/(mass*2)
+
+  // Calculate the constant h/(mass*2) 
   vector<double> h_mass_two;
   for (int i = 0; i < S.bodies.size(); i++) {
     h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
   }
 
+  // Declare a vector storing the forces
+  vector<vec3> forces_temp;
+  
   double theta_p = 0;
   vec3 r_temp(0, 0, 0);
 
+  int counter = 0;
+
   // Run the calculations
   while (t < T) {
-
-    //r_temp = mercury->getPosition();
-    solver.integrate(&S, &F, h, h_mass_two);
+    
+    r_temp = mercury->getPosition();
+    forces_temp = solver.storeForces(&S);
+    
+    solver.updatePosition(&S, h, h_mass_two);
+    
+    S.resetForces();
+    F.relativisticForces(&S);
+    
+    solver.updateVelocity(&S, h, h_mass_two, forces_temp);
+    
     t += h;
-    S.output(ofile, t);
-    /*
+    
+    //S.output(ofile, t);
+    
     while (mercury->getPosition().length() - r_temp.length() < 0) {
+      
       r_temp = mercury->getPosition();
-      solver.integrate(&S, &F, h, h_mass_two);
+      forces_temp = solver.storeForces(&S);
+      
+      solver.updatePosition(&S, h, h_mass_two);
+      
+      S.resetForces();
+      F.relativisticForces(&S);
+      
+      solver.updateVelocity(&S, h, h_mass_two, forces_temp);
+      
       t += h;
-      S.output(ofile, t);
+      
+      //S.output(ofile, t);
+
       if (mercury->getPosition().length() - r_temp.length() > 0) {
+	
 	theta_p = atan(r_temp.y()/r_temp.x());
+	ofile << theta_p*3600 << endl;
+	
+	counter += 1;
+	
       } else {
       }
     }
-    */
+
   }
-
+  
   ofile.close();
-
-  //cout << theta_p*3600 << endl;
-
+  
+  cout << counter << endl;
+  
+  cout << theta_p*3600 << endl;
+  
   return 0;
 }

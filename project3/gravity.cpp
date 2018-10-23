@@ -1,12 +1,19 @@
-#include "newtonian_gravity.h"
+#include "gravity.h"
 
-NewtonianGravity::NewtonianGravity(double G, double solar_mass)
+Gravity::Gravity(double G, double solar_mass)
 {
   m_G = G;
   m_solar_mass = solar_mass;
 }
 
-void NewtonianGravity::forces(System* system)
+Gravity::Gravity(double G, double solar_mass, double c)
+{
+  m_G = G;
+  m_solar_mass = solar_mass;
+  m_c = c;
+}
+
+void Gravity::newtonianForces(System* system)
 {
   // Initialise the distance and force
   double r = 0;
@@ -30,6 +37,30 @@ void NewtonianGravity::forces(System* system)
       
     }
   }
+}
+
+void Gravity::relativisticForces(System* system)
+{
+  // Initialise the distance and force
+  double r = 0;  vec3 r_vec(0, 0, 0);  vec3 force(0, 0, 0);
+  
+  // i=0 -> planet, i = 1 -> sun
+
+  // Calculate the distance between the planet and the sun
+  r_vec = system->bodies[0]->getPosition() - system->bodies[1]->getPosition();
+  r = r_vec.length();
+
+  // Calculate the angular momentum of the planet
+  system->bodies[0]->setAngular_momentum();
+
+  // Calculate the force from the sun on the planet
+  force = r_vec * (-m_G) * system->bodies[0]->getMass() / (r*r*r) \
+    * (1 + 3*system->bodies[0]->getAngular_momentum().lengthSquared() / (r*r*m_c*m_c )) ;
+  
+  system->bodies[0]->setForce(system->bodies[0]->getForce() + force);
+  
+  // Use N3L to calculate the force from object the planet on the sun
+  //system->bodies[1]->setForce(system->bodies[1]->getForce() - force);
 }
 
 void Gravity::potential(System* system)

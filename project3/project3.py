@@ -52,10 +52,10 @@ plt.legend(loc="best", fontsize="xx-small")
 
 # Save the plot
 plt.savefig(datafile.replace(".dat",".png"))
-plt.close()
+plt.show()
 
 #----------------------------------------------------------------------------
-
+"""
 # ANIMATION
 
 # Create a figure and an axis, and set it up
@@ -99,7 +99,9 @@ def animate(i):
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
                                 init_func=init, interval=1, blit=True)
+
 plt.show()
 
 # Save the animation
 #ani.save('earth.mp4')
+"""

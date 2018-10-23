@@ -45,7 +45,7 @@ class CelestialBody {
   void setPotential_energy(double potential_energy) { m_potential_energy = potential_energy; }
 
   void setKinetic_energy() { m_kinetic_energy = 0.5*m_mass*m_velocity.lengthSquared(); }
-  void setAngular_momentum() { m_angular_momentum = m_position.cross(m_velocity)*m_mass; }
+  void setAngular_momentum() { m_angular_momentum = m_position.cross(m_velocity); }
 
   // Print function
   void print();
