@@ -1,12 +1,12 @@
-#include "gravity.h"
+#include "newtonian_gravity.h"
 
-Gravity::Gravity(double G, double solar_mass)
+NewtonianGravity::NewtonianGravity(double G, double solar_mass)
 {
   m_G = G;
   m_solar_mass = solar_mass;
 }
 
-void Gravity::forces(System* system)
+void NewtonianGravity::forces(System* system)
 {
   // Initialise the distance and force
   double r = 0;

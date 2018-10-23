@@ -60,7 +60,7 @@ plt.close()
 
 # Create a figure and an axis, and set it up
 fig2 = plt.figure()
-ax = plt.axes(aspect="equal", xlim=(-50, 50), ylim=(-50, 50),
+ax = plt.axes(aspect="equal", xlim=(-1, 1), ylim=(-1, 1),
                 title="Solar System", xlabel="x [AU]", ylabel="y [AU]")
 ax.grid()
 mpl.rcParams["legend.numpoints"] = 1
@@ -68,9 +68,12 @@ mpl.rcParams["legend.numpoints"] = 1
 # Initialise the orbits and the timing
 
 orbits = []
+planets = []
 for name in names:
     orbit, = ax.plot([], [], "-", lw=1, label=name)
     orbits.append(orbit)
+    planet, = ax.plot([], [], "o", ms=5)
+    planets.append(planet)
 
 time_text = ax.text(0.05, 0.95, "", transform=ax.transAxes)
 
@@ -78,22 +81,24 @@ time_text = ax.text(0.05, 0.95, "", transform=ax.transAxes)
 def init():
     for j in range(len(names)):
         orbits[j].set_data([], [])
+        planets[j].set_data([], [])
     time_text.set_text("")
-    return tuple(orbits) + (time_text,)
+    return tuple(orbits) + tuple(planets) + (time_text,)
 
 # Define the animate-function, which is called at each frame
 def animate(i):
     k = 1
     for j in range(len(names)):
         orbits[j].set_data(data[:i,k], data[:i,k+1])
+        planets[j].set_data(data[i,k], data[i,k+1])
         k += 3
     time_text.set_text("%.1f years" % data[i,0])
     ax.legend(loc="best", fontsize="xx-small")
-    return tuple(orbits) + (time_text,)
+    return tuple(orbits) + tuple(planets) + (time_text,)
 
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
-                                init_func=init, interval=10, blit=True)
+                                init_func=init, interval=1, blit=True)
 plt.show()
 
 # Save the animation

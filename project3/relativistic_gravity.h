@@ -1,30 +1,28 @@
-#ifndef GRAVITY_H
-#define GRAVITY_H
+#ifndef RELATIVISTIC_GRAVITY_H
+#define RELATIVISTIC_GRAVITY_H
 
 #include "system.h"
 
-class Gravity
+class RelativisticGravity
 {
   
  private:
   
   double m_G;
   double m_solar_mass;
-  
+  double m_c;
+
  public:
   
   // Constructor
-  Gravity(double G, double sunMass);
+  RelativisticGravity(double G, double solar_mass, double c);  
   
   // Destructor
-  ~Gravity() {}
+  ~RelativisticGravity() {}
   
   // Calculate the gravitational forces between the objects in the system
   void forces(System* system);
   
-  // Calculate the potential energy of the objects in the system
-  void potential(System* system);
-  
 };
 
-#endif // GRAVITY_H
+#endif // RELATIVISTIC_GRAVITY_H

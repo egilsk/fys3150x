@@ -3,7 +3,8 @@
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"
-#include "gravity.h"
+#include "newtonian_gravity.h"
+#include "relativistic_gravity.h"
 #include "forward_euler.h"
 #include "velocity_verlet.h"
 
@@ -121,7 +122,7 @@ int main (int argc, char* argv[]){
   VelocityVerlet solver;
 
   // Calculate the initial force (Verlet)
-  F.forces(&S);
+  F.newtonianForces(&S);
   // Calculate the constant h/(mass*2) (Verlet)
   vector<double> h_mass_two;
   for (int i = 0; i < S.bodies.size(); i++) {
