@@ -32,8 +32,12 @@ int main (int argc, char* argv[]){
   double t = 0.0;
   
   // Initialise the Sun
-  vec3 r_sun(-6.28e-3, 5.98e-3, 1.46e-4);
-  vec3 v_sun = vec3(-6.16e-6, -5.57e-6, 1.79e-7)*365;
+  //vec3 r_sun(-6.28e-3, 5.98e-3, 1.46e-4);
+  //vec3 v_sun = vec3(-6.16e-6, -5.57e-6, 1.79e-7)*365;
+  //double mass_sun = 1.99e30;
+
+  vec3 r_sun(0, 0, 0);
+  vec3 v_sun = vec3(0, 0, 0);
   double mass_sun = 1.99e30;
 
   // Initialise Mercury
@@ -47,8 +51,12 @@ int main (int argc, char* argv[]){
   double mass_venus = 4.87e24;
 
   // Initialise Earth
-  vec3 r_earth(-4.68e-1, 8.75e-1, 1.54e-4);
-  vec3 v_earth = vec3(-1.55e-2, -8.15e-3, 4.84e-7)*365;
+  //vec3 r_earth(-4.68e-1, 8.75e-1, 1.54e-4);
+  //vec3 v_earth = vec3(-1.55e-2, -8.15e-3, 4.84e-7)*365;
+  //double mass_earth = 5.97e24;
+
+  vec3 r_earth(1, 0, 0);
+  vec3 v_earth = vec3(0, 2*pi, 0);
   double mass_earth = 5.97e24;
 
   // Initialise Mars
@@ -100,7 +108,7 @@ int main (int argc, char* argv[]){
   //S.addObject(venus);
   S.addObject(earth);
   //S.addObject(mars);
-  S.addObject(jupiter);
+  //S.addObject(jupiter);
   //S.addObject(saturn);
   //S.addObject(uranus);
   //S.addObject(neptun);

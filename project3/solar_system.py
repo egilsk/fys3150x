@@ -55,9 +55,9 @@ plt.savefig(datafile.replace(".dat",".png"))
 plt.show()
 
 #----------------------------------------------------------------------------
-"""
-# ANIMATION
 
+# ANIMATION
+"""
 # Create a figure and an axis, and set it up
 fig2 = plt.figure()
 ax = plt.axes(aspect="equal", xlim=(-1, 1), ylim=(-1, 1),
@@ -65,15 +65,20 @@ ax = plt.axes(aspect="equal", xlim=(-1, 1), ylim=(-1, 1),
 ax.grid()
 mpl.rcParams["legend.numpoints"] = 1
 
-# Initialise the orbits and the timing
+# Specify color and size
+color = ["yo", "bo"]
+size = [12, 4]
 
+# Initialise the orbits and the timing
 orbits = []
 planets = []
+j = 0
 for name in names:
     orbit, = ax.plot([], [], "-", lw=1, label=name)
     orbits.append(orbit)
-    planet, = ax.plot([], [], "o", ms=5)
+    planet, = ax.plot([], [], color[j], ms=size[j])
     planets.append(planet)
+    j += 1
 
 time_text = ax.text(0.05, 0.95, "", transform=ax.transAxes)
 
@@ -98,7 +103,7 @@ def animate(i):
 
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
-                                init_func=init, interval=1, blit=True)
+                                init_func=init, interval=50, blit=True)
 
 plt.show()
 

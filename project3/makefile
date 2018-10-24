@@ -1,7 +1,7 @@
 CPPflags = c++ -std=c++11
 
 solar_system:		solar_system.o vec3.o celestialbody.o system.o gravity.o forward_euler.o velocity_verlet.o
-			${CPPflags} solar_system.o vec3.o celestialbody.o system.o  gravity.o forward_euler.o velocity_verlet.o -o main.exe
+			${CPPflags} solar_system.o vec3.o celestialbody.o system.o  gravity.o forward_euler.o velocity_verlet.o -o solar_system.exe
 
 mercury:	mercury_precession.o vec3.o celestialbody.o system.o gravity.o velocity_verlet.o
 			${CPPflags} mercury_precession.o vec3.o celestialbody.o system.o gravity.o velocity_verlet.o -o mercury_precession.exe
