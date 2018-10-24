@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"
@@ -58,10 +56,6 @@ int main (int argc, char* argv[]) {
   // Declare and open output file
   ofstream ofile;
   ofile.open("mercury.dat");
-  
-  // Create header and write out the starting positions
-  //S.header(ofile, n);
-  //S.output(ofile, t);
 
   // Initialise the force and the solver
   Gravity F(four_pi2, mass_sun, c);
@@ -76,13 +70,13 @@ int main (int argc, char* argv[]) {
     h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
   }
 
-  // Declare a vector storing the forces
+  // Declare a vector storing the forces and a vec3 storing the distance
   vector<vec3> forces_temp;
-  
-  double theta_p = 0;
   vec3 r_temp(0, 0, 0);
 
-  int counter = 0;
+  // Declare theta_p and number of orbits
+  double theta_p;   
+  int orbits = 0;
 
   // Run the calculations
   while (t < T) {
@@ -99,8 +93,7 @@ int main (int argc, char* argv[]) {
     
     t += h;
     
-    //S.output(ofile, t);
-    
+    // Check if the distance from the sun decreases
     while (mercury->getPosition().length() - r_temp.length() < 0) {
       
       r_temp = mercury->getPosition();
@@ -114,15 +107,16 @@ int main (int argc, char* argv[]) {
       solver.updateVelocity(&S, h, h_mass_two, forces_temp);
       
       t += h;
-      
-      //S.output(ofile, t);
 
+      // Check if the distance from the sun increases
       if (mercury->getPosition().length() - r_temp.length() > 0) {
 	
-	theta_p = atan(r_temp.y()/r_temp.x());
-	ofile << theta_p*3600 << endl;
+	// Calculate theta_p and write to file
+	theta_p = atan(r_temp.y()/r_temp.x())*180/pi*3600;
+	ofile << theta_p << endl;
 	
-	counter += 1;
+	// Count the number of orbits
+	orbits += 1;
 	
       } else {
       }
@@ -132,9 +126,7 @@ int main (int argc, char* argv[]) {
   
   ofile.close();
   
-  cout << counter << endl;
-  
-  cout << theta_p*3600 << endl;
-  
+  cout << orbits << endl;
+
   return 0;
 }

@@ -16,19 +16,15 @@ with open(datafile, 'r') as infile:
     for i in range(415):
         theta[i] = infile.readline()
 
-#----------------------------------------------------------------------------
-
-# PLOT
-
 # Create a figure, and set it up
 fig = plt.figure()
 plt.xlabel("Number of orbits")
-plt.ylabel("theta_p [\'\']")
-plt.title("Mercury Percession")
+plt.ylabel(r"$\theta_p$" + " [arcsec]")
+plt.title("Mercury's Perihelion Precession")
 
-# Plot the position of the sun and the planets
+# Plot the perihelion precession angle
 plt.plot(theta, 'o')
 
 # Save the plot
-#plt.savefig(datafile.replace(".dat",".png"))
-plt.show()
+plt.savefig(datafile.replace(".dat",".png"))
+#plt.show()

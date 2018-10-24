@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"

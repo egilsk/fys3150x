@@ -60,7 +60,7 @@ void Gravity::relativisticForces(System* system)
   system->bodies[0]->setForce(system->bodies[0]->getForce() + force);
   
   // Use N3L to calculate the force from object the planet on the sun
-  //system->bodies[1]->setForce(system->bodies[1]->getForce() - force);
+  system->bodies[1]->setForce(system->bodies[1]->getForce() - force);
 }
 
 void Gravity::potential(System* system)

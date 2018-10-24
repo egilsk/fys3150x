@@ -1,8 +1,13 @@
 #ifndef VEC3_H
 #define VEC3_H
 
-#include <string>
 #include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cstdlib>
+#include <vector>
+#include <string>
+#include <cmath>
 
 using std::string;
 using std::cout;
