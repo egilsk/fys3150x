@@ -20,11 +20,7 @@ with open(datafile, 'r') as infile:
 fig = plt.figure()
 plt.xlabel("Number of orbits")
 plt.ylabel(r"$\theta_p$" + " [arcsec]")
-<<<<<<< HEAD:project3/sandbox.py
-plt.title("Mercury Percession")
-=======
 plt.title("Mercury's Perihelion Precession")
->>>>>>> 4c0863f1a1ab2eb7e5ba45ec5b8795a80ea8d34d:project3/mercury_precession.py
 
 # Plot the perihelion precession angle
 plt.plot(theta, 'o')
