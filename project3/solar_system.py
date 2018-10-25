@@ -53,7 +53,7 @@ mpl.rcParams["legend.numpoints"] = 1
 plt.legend(loc="best", fontsize="xx-small")
 
 # Save the plot
-plt.savefig(datafile.replace(".txt",".png"))
+plt.savefig(datafile.replace(".dat",".png"))
 plt.show()
 
 #----------------------------------------------------------------------------
@@ -107,12 +107,8 @@ def animate(i):
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
                                 init_func=init, interval=1, blit=True)
 
-#plt.show()
+plt.show()
 
 # Save the animation
-<<<<<<< HEAD
-ani.save(datafile.replace(".txt",".mp4"))
-=======
-#ani.save('earth.mp4')
+#ani.save(datafile.replace(".dat",".mp4"))
 """
->>>>>>> 4a3d2e469b001bb5e14a12e0b346517a22ab8cc4
