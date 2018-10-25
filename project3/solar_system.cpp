@@ -1,5 +1,3 @@
-#include <chrono>
-
 #include "vec3.h"
 #include "celestialbody.h"
 #include "system.h"
@@ -8,7 +6,6 @@
 #include "velocity_verlet.h"
 
 using namespace std;
-using namespace chrono;
 
 int main (int argc, char* argv[]){
 
@@ -35,12 +32,8 @@ int main (int argc, char* argv[]){
   double t = 0.0;
   
   // Initialise the Sun
-  //vec3 r_sun(-6.28e-3, 5.98e-3, 1.46e-4);
-  //vec3 v_sun = vec3(-6.16e-6, -5.57e-6, 1.79e-7)*365;
-  //double mass_sun = 1.99e30;
-
-  vec3 r_sun(0, 0, 0);
-  vec3 v_sun = vec3(0, 0, 0);
+  vec3 r_sun(-6.28e-3, 5.98e-3, 1.46e-4);
+  vec3 v_sun = vec3(-6.16e-6, -5.57e-6, 1.79e-7)*365;
   double mass_sun = 1.99e30;
 
   // Initialise Mercury
@@ -54,13 +47,9 @@ int main (int argc, char* argv[]){
   double mass_venus = 4.87e24;
 
   // Initialise Earth
-  //vec3 r_earth(-4.68e-1, 8.75e-1, 1.54e-4);
-  //vec3 v_earth = vec3(-1.55e-2, -8.15e-3, 4.84e-7)*365;
-  //double mass_earth = 5.97e24;
-
-  vec3 r_earth(1, 0, 0);
-  vec3 v_earth = vec3(0, 2*pi, 0);
-  double mass_earth = 5.97e30;
+  vec3 r_earth(-4.68e-1, 8.75e-1, 1.54e-4);
+  vec3 v_earth = vec3(-1.55e-2, -8.15e-3, 4.84e-7)*365;
+  double mass_earth = 5.97e24;
 
   // Initialise Mars
   vec3 r_mars(-1.47, 8.07e-1, 5.28e-2);
@@ -68,12 +57,8 @@ int main (int argc, char* argv[]){
   double mass_mars = 6.42e23;
 
   // Initialise Jupiter
-  //vec3 r_jupiter(2.51, -4.46, -3.78e-2);
-  //vec3 v_jupiter = vec3(6.47e-3, 4.06e-3, -1.62e-4)*365;
-  //double mass_jupiter = 1.90e27;
-
-  vec3 r_jupiter(5.2, 0, 0);
-  vec3 v_jupiter = vec3(0, 2*pi*r_jupiter.x()/12 , 0);
+  vec3 r_jupiter(2.51, -4.46, -3.78e-2);
+  vec3 v_jupiter = vec3(6.47e-3, 4.06e-3, -1.62e-4)*365;
   double mass_jupiter = 1.90e27;
 
   // Initialise Saturn
@@ -111,79 +96,66 @@ int main (int argc, char* argv[]){
   CelestialBody* pluto = new CelestialBody("Pluto", r_pluto, v_pluto, mass_pluto);  
 
   S.addObject(sun);
-  //S.addObject(mercury);
-  //S.addObject(venus);
+  S.addObject(mercury);
+  S.addObject(venus);
   S.addObject(earth);
-  //S.addObject(mars);
-  //S.addObject(jupiter);
-  //S.addObject(saturn);
-  //S.addObject(uranus);
-  //S.addObject(neptun);
-  //S.addObject(pluto);
+  S.addObject(mars);
+  S.addObject(jupiter);
+  S.addObject(saturn);
+  S.addObject(uranus);
+  S.addObject(neptun);
+  S.addObject(pluto);
   
   // Declare and open output file
   ofstream ofile;
-  ofile.open("timing.dat");
-  ofile << "$n$ {Time used}" << endl;
+  ofile.open("solar_system.dat");
   
   // Create header and write out the starting positions
-  //S.header(ofile, n);
-  //S.output(ofile, t);
+  S.header(ofile, n);
+  S.output(ofile, t);
 
   // Initialise the force and the solver
   Gravity F(four_pi2, mass_sun);
   VelocityVerlet solver;
 
-  // Calculate the initial force (Verlet)
+  // Calculate the initial force
   F.newtonianForces(&S);
 
-  // Calculate the constant h/(mass*2) (Verlet)
+  // Calculate the constant h/(mass*2)
   vector<double> h_mass_two;
   for (int i = 0; i < S.bodies.size(); i++) {
     h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
   }
 
-  // Declare a vector storing the forces (Verlet)
+  // Declare a vector storing the forces
   vector<vec3> forces_temp;
-
-  for (int i = 0; i < 10; i++) {
+  
+  // Run the calculations
+  t = 0;
+  while (t < T) {
     
-    // Time the algorithm
-    auto start = high_resolution_clock::now();
-    cout << "start" << endl;
+    // Store current forces
+    forces_temp = solver.storeForces(&S);
     
-    // Run the calculations
-    while (t < T) {
-      
-      // Store current forces
-      forces_temp = solver.storeForces(&S);
-      
-      // Update position
-      solver.updatePosition(&S, h, h_mass_two);
-      
-      // Update forces
-      S.resetForces();
-      F.newtonianForces(&S);
-      
-      // Update velocity
-      solver.updateVelocity(&S, h, h_mass_two, forces_temp);
-      
-      //solver.integrate(&S, h);
-      
-      // Update time
-      t += h;
-      
-      // Write to file
-      //S.output(ofile, t);
-    }
+    // Update position
+    solver.updatePosition(&S, h, h_mass_two);
     
-    auto finish = high_resolution_clock::now();
-    duration<double> time_used = finish - start;
+    // Update forces
+    S.resetForces();
+    F.newtonianForces(&S);
     
-    ofile << n << " " << time_used.count() << endl;
+    // Update velocity
+    solver.updateVelocity(&S, h, h_mass_two, forces_temp);
+    
+    // Update time
+    t += h;
+    
+    // Write to file
+    S.output(ofile, t);
   }
+  
   ofile.close();
   
   return 0;
 }
-      
+
