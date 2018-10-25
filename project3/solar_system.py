@@ -110,9 +110,5 @@ ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
 #plt.show()
 
 # Save the animation
-<<<<<<< HEAD
 ani.save(datafile.replace(".txt",".mp4"))
-=======
-#ani.save('earth.mp4')
 """
->>>>>>> 4a3d2e469b001bb5e14a12e0b346517a22ab8cc4
