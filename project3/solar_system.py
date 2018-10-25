@@ -35,20 +35,24 @@ with open(datafile, 'r') as infile:
 
 # Create a figure, and set it up
 fig1 = plt.figure()
-plt.axis("equal")
 plt.xlabel("x [AU]")
 plt.ylabel("y [AU]")
-plt.title("Solar system")
+plt.title("Earth in circular orbit (Verlet)")
+plt.axis("equal")
+plt.axis([-1.1, 1.1, -1.1, 1.1])
+plt.grid()
+
+plt.plot(0,0, "yo", ms = 12, label="Sun")
 
 # Plot the position of the sun and the planets
-i = 1
-for name in names:
-    plt.plot(data[:,i], data[:,i+1], label=name)
-    i += 3
+j = 4
+for i in range(1,len(names)):
+    plt.plot(data[:,j], data[:,j+1], label=names[i])
+    j += 3
 
 # Set up the legend
 mpl.rcParams["legend.numpoints"] = 1
-plt.legend(loc="best", fontsize="xx-small")
+plt.legend(loc="best")#, fontsize="xx-small")
 
 # Save the plot
 plt.savefig(datafile.replace(".dat",".png"))
@@ -60,14 +64,14 @@ plt.show()
 """
 # Create a figure and an axis, and set it up
 fig2 = plt.figure()
-ax = plt.axes(aspect="equal", xlim=(-1, 1), ylim=(-1, 1),
+ax = plt.axes(aspect="equal", xlim=(-10, 10), ylim=(-10, 10),
                 title="Solar System", xlabel="x [AU]", ylabel="y [AU]")
 ax.grid()
 mpl.rcParams["legend.numpoints"] = 1
 
 # Specify color and size
-color = ["yo", "bo"]
-size = [12, 4]
+color = ["yo", "bo", "ro"]
+size = [12, 3, 6]
 
 # Initialise the orbits and the timing
 orbits = []
@@ -103,7 +107,7 @@ def animate(i):
 
 # Run the animation
 ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
-                                init_func=init, interval=50, blit=True)
+                                init_func=init, interval=1, blit=True)
 
 plt.show()
 

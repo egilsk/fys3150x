@@ -6,13 +6,13 @@ void ForwardEuler::integrate(System* system, const double h)
   vec3 velocity_temp(0,0,0);
   
   // Perform the integration
-  for (CelestialBody* object : system->bodies) {
+  for (int i = 1; i < system->bodies.size(); i++) {
     
-    velocity_temp = object->getVelocity() + object->getForce()/object->getMass()*h;
+    velocity_temp = system->bodies[i]->getVelocity() + system->bodies[i]->getForce()/system->bodies[i]->getMass()*h;
 
-    object->setPosition(object->getPosition() +  object->getVelocity()*h);    
+    system->bodies[i]->setPosition(system->bodies[i]->getPosition() +  system->bodies[i]->getVelocity()*h);    
     
-    object->setVelocity(velocity_temp);
+    system->bodies[i]->setVelocity(velocity_temp);
     
   }
 }

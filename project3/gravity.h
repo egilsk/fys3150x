@@ -12,6 +12,7 @@ class Gravity
   double m_G;
   double m_solar_mass;
   double m_c;
+  double m_c2;
 
  public:
   
