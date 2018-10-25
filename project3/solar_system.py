@@ -110,9 +110,5 @@ ani = animation.FuncAnimation(fig2, animate, frames=len(data[:,0]),
 plt.show()
 
 # Save the animation
-<<<<<<< HEAD
 #ani.save(datafile.replace(".dat",".mp4"))
-=======
-ani.save(datafile.replace(".txt",".mp4"))
->>>>>>> b6af757ae23031f1b620b83ad4aa008f624aa459
 """
