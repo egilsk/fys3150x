@@ -13,7 +13,8 @@ class ForwardEuler
 
   // Destructor
   ~ForwardEuler() {}
-  
+
+  // Integrator
   void integrate(System* system, const double h);
   
 };

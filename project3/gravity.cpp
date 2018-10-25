@@ -11,6 +11,7 @@ Gravity::Gravity(double G, double solar_mass, double c)
   m_G = G;
   m_solar_mass = solar_mass;
   m_c = c;
+  m_c2 = c*c;
 }
 
 void Gravity::newtonianForces(System* system)
@@ -29,7 +30,7 @@ void Gravity::newtonianForces(System* system)
       r = r_vec.length();
       
       // Calculate the force from object j on i
-      force = r_vec * (-m_G) * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_solar_mass*r*r*r);
+      force = r_vec * (-m_G) * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_solar_mass*pow(r,3.0));
       system->bodies[i]->setForce(system->bodies[i]->getForce() + force);
       
       // Use N3L to calculate the force from object i on j
@@ -42,25 +43,29 @@ void Gravity::newtonianForces(System* system)
 void Gravity::relativisticForces(System* system)
 {
   // Initialise the distance and force
-  double r = 0;  vec3 r_vec(0, 0, 0);  vec3 force(0, 0, 0);
+  double r = 0;
+  double r2 = 0;
+  vec3 r_vec(0, 0, 0);  
+  vec3 force(0, 0, 0);
   
   // i=0 -> planet, i = 1 -> sun
 
   // Calculate the distance between the planet and the sun
   r_vec = system->bodies[0]->getPosition() - system->bodies[1]->getPosition();
   r = r_vec.length();
+  r2 = r*r;
 
   // Calculate the angular momentum of the planet
-  system->bodies[0]->setAngular_momentum();
+  system->bodies[0]->setAngular_momentum_per_mass();
 
   // Calculate the force from the sun on the planet
-  force = r_vec * (-m_G) * system->bodies[0]->getMass() / (r*r*r) \
-    * (1 + 3*system->bodies[0]->getAngular_momentum().lengthSquared() / (r*r*m_c*m_c )) ;
+  force = r_vec * (-m_G) * system->bodies[0]->getMass() / (r*r2) \
+    * (1 + 3*system->bodies[0]->getAngular_momentum_per_mass().lengthSquared() / (r2*m_c2)) ;
   
   system->bodies[0]->setForce(system->bodies[0]->getForce() + force);
   
   // Use N3L to calculate the force from object the planet on the sun
-  //system->bodies[1]->setForce(system->bodies[1]->getForce() - force);
+  system->bodies[1]->setForce(system->bodies[1]->getForce() - force);
 }
 
 void Gravity::potential(System* system)

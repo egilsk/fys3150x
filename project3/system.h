@@ -1,12 +1,6 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-
 #include "celestialbody.h"
 
 using namespace std;
