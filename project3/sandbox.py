@@ -23,7 +23,7 @@ with open(datafile, 'r') as infile:
 # Create a figure, and set it up
 fig = plt.figure()
 plt.xlabel("Number of orbits")
-plt.ylabel("theta_p [\'\']")
+plt.ylabel(r"$\theta_p$" + " [arcsec]")
 plt.title("Mercury Percession")
 
 # Plot the position of the sun and the planets
