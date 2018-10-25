@@ -26,5 +26,5 @@ plt.title("Mercury's Perihelion Precession")
 plt.plot(theta, 'o')
 
 # Save the plot
-plt.savefig(datafile.replace(".dat",".png"))
-#plt.show()
+plt.savefig(datafile.replace(".txt",".png"))
+plt.show()
