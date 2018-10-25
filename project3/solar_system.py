@@ -32,19 +32,19 @@ with open(datafile, 'r') as infile:
 #----------------------------------------------------------------------------
 
 # PLOT
-"""
+
 # Create a figure, and set it up
 fig1 = plt.figure()
 plt.xlabel("x [AU]")
 plt.ylabel("y [AU]")
 plt.title("Inner Solar System")
 plt.axis("equal")
-plt.axis([-2, 2, -2, 2])
+#plt.axis([-2, 2, -2, 2])
 plt.grid()
 
 # Plot the position of the sun and the planets
 j = 1
-for i in range(len(names)-5):
+for i in range(len(names)):
     plt.plot(data[:,j], data[:,j+1], label=names[i])
     j += 3
 
@@ -55,9 +55,9 @@ plt.legend(loc="best", fontsize="xx-small")
 # Save the plot
 plt.savefig(datafile.replace(".dat",".png"))
 plt.show()
-"""
-#----------------------------------------------------------------------------
 
+#----------------------------------------------------------------------------
+"""
 # ANIMATION
 
 # Create a figure and an axis, and set it up
@@ -111,3 +111,4 @@ plt.show()
 
 # Save the animation
 #ani.save('earth.mp4')
+"""
