@@ -10,12 +10,9 @@ int main(int argc, char* argv[])
   double E = 8*(exp(-8) - exp(8))/Z;
   double M = 4*(exp(8) + 2)/Z;
   double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z);
-  double khi = 16*(exp(8) + 1)/Z;
+  double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z);
 
-  cout << E/4 << endl;
-  cout << M/4 << endl;
-  cout << C_V/4 << endl;
-  cout << khi/4 << endl;
+  cout << E << " " << M << " " << C_V << " " << khi << endl;
   
   return 0;
 }
