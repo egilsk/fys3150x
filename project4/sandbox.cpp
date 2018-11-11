@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cmath>
+#include <armadillo>
 
 using namespace std;
+using namespace arma;
 
 int main(int argc, char* argv[])
 {
@@ -14,5 +16,8 @@ int main(int argc, char* argv[])
 
   cout << E << " " << M << " " << C_V << " " << khi << endl;
   
+  vec A = zeros<mat>(5);
+  cout << A[-1] << endl;
+
   return 0;
 }
