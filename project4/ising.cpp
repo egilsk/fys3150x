@@ -42,15 +42,20 @@ void Initialise(mat& lattice, double& energy, double& magnetic_moment, int n_spi
 void Metropolis(vec& values, double T, int n_spin, int n_cycles, ofstream& ofile)
 {
 
-  // Create header (for equilibration considerations)
+  // Create header (for equilibration analysis)
+  //ofile << setiosflags(ios::showpoint | ios::left);
+  //ofile << "Number of MC cycles: " << n_cycles << endl;
+  //ofile << setw(16) << "Energy";
+  //ofile << setw(16) << "Magnetisation";
+  //ofile << setw(16) << "Number_of_Accepted_Moves" << endl;
+  
+  // Declare a counter for the number of accepted moves
+  //int accepted;
+
+  // Create header (for probability analysis)
   ofile << setiosflags(ios::showpoint | ios::left);
   ofile << "Number of MC cycles: " << n_cycles << endl;
-  ofile << setw(16) << "Energy";
-  ofile << setw(16) << "Magnetisation";
-  ofile << setw(16) << "Number_of_Accepted_Moves" << endl;
-  
-  // Declare a variable storing the number of accepted moves
-  int accepted;
+  ofile << setw(16) << "Energy" << endl;
 
   // Initialise the seed generator
   random_device rd;
@@ -76,7 +81,7 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, ofstream& ofile
   // Monte Carlo sampling
   for (int cycles = 1; cycles <= n_cycles; cycles++){
     
-    accepted = 0;
+    //accepted = 0;
     
     // Sweep over the lattice
     for (int x = 0; x < n_spin; x++) {
@@ -103,7 +108,7 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, ofstream& ofile
 	  E += 4.0*delta_E;
 	  M += 2.0*lattice(ix, iy);
 
-	  accepted += 1;
+	  //accepted += 1;
 
 	}
 
@@ -115,11 +120,14 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, ofstream& ofile
     values(2) += M; values(3) += M*M;
     values(4) += fabs(M);
     
-    // Write to file (for equilibration considerations)
-    ofile << setw(16) << setprecision(8) << values(0)/cycles;
-    ofile << setw(16) << setprecision(8) << values(4)/cycles;
-    ofile << setw(16) << setprecision(8) << accepted << endl;
+    // Write to file (for equilibration analysis)
+    //ofile << setw(16) << setprecision(8) << values(0)/cycles;
+    //ofile << setw(16) << setprecision(8) << values(4)/cycles;
+    //ofile << setw(16) << setprecision(8) << accepted << endl;
     
+    // Write to file (for probability analysis)
+    ofile << setw(16) << setprecision(8) << E << endl;
+
   }
   
   // Divide by number of cycles

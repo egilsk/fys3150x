@@ -15,7 +15,7 @@ with open(datafile, 'r') as infile:
     # Read number of MC cycles
     n_cycles = int(infile.readline().split()[-1])
     cycles = np.linspace(1, n_cycles, n_cycles)
-    
+
     # Read number of variables
     n_variables = len(infile.readline().split())
 
