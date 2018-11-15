@@ -17,7 +17,7 @@ void Initialise(mat&, double&, double&, int);
 void Metropolis(vec&, double, int, int, int, ofstream&);
 
 // Create header
-void Header(ofstream&, int);
+void Header(ofstream&, int, int);
 
 // Write to file
 void Output(ofstream&, vec, double);

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <string>
+#include "omp.h"
 
 #include "ising.h"
 
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
   // Open output file
   ofile.open("ising.dat");
   // Create header
-  //Header(ofile, n_cycles, n_equilibration);
+  Header(ofile, n_cycles, n_equilibration);
 
   // Declare a vector which stores the expectation values
   vec values;
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
     Metropolis(values, T, n_spin, n_cycles, n_equilibration, ofile);
   
     // Write to file
-    //Output(ofile, values, T);
+    Output(ofile, values, T);
     
   }
   

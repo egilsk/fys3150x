@@ -1,7 +1,8 @@
 CPPflags = c++ -std=c++11 -larmadillo
+CPPflags1 = c++ -fopenmp -std=c++11 -larmadillo
 
 main:		main.o ising.o
-			${CPPflags} main.o ising.o -o main.exe
+			${CPPflags1} main.o ising.o -o main.exe
 
 main.o:		main.cpp 
 			${CPPflags} -c main.cpp
