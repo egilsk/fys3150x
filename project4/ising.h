@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <random>
 #include <armadillo>
+#include "omp.h"
 
 using namespace std;
 using namespace arma;

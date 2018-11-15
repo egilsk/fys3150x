@@ -77,10 +77,15 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
   for (int i = -2; i <= 2; i++) E_changes(i+2) = exp(-4*i/T);
   // Define pointer to access energy changes
   double* Energy_changes = &E_changes(2);
-
+  
+#pragma omp parallel default(shared) private(cycles, E, M) reduction(+:values(0),values(1),values(2),values(3),values(4))
+  {
+    
+#pragma omp for
+    
   // Equilibration cycles
   for (int cycles = 1; cycles <= n_equilibration; cycles++){
-    
+
     // Sweep over the lattice
     for (int sweep = 0; sweep < n_spin*n_spin; sweep++) {
       
@@ -111,6 +116,8 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
     
   }
   
+#pragma omp for
+
   // Monte Carlo sampling
   for (int cycles = 1; cycles <= (n_cycles - n_equilibration); cycles++){
     
@@ -143,7 +150,7 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
 	//accepted += 1;
 	
       }
-      
+
     }
     
     // Add contribution to expectation values
@@ -159,6 +166,7 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
     // Write to file (for probability analysis)
     //ofile << setw(16) << setprecision(8) << E << endl;
     
+  }
   }
   
   // Divide by number of cycles

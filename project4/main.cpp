@@ -42,6 +42,9 @@ int main(int argc, char* argv[])
 
   // Declare a vector which stores the expectation values
   vec values;
+
+  // Time the loop
+  double start = omp_get_wtime();
   
   // Loop over temperatures
   for (double T = T_start; T <= T_end; T += T_step){
@@ -57,6 +60,10 @@ int main(int argc, char* argv[])
     
   }
   
+  double finish = omp_get_wtime();
+  double time_used = finish - start;
+  cout << time_used << endl;
+
   ofile.close();
 
   // Analytical results for 2x2 lattice
