@@ -82,74 +82,70 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
   for (int cycles = 1; cycles <= n_equilibration; cycles++){
     
     // Sweep over the lattice
-    for (int x = 0; x < n_spin; x++) {
-      for (int y = 0; y < n_spin; y++){
+    for (int sweep = 0; sweep < n_spin*n_spin; sweep++) {
+      
+      // Select random position
+      int ix = distribution(gen)*n_spin;
+      int iy = distribution(gen)*n_spin;
+      
+      // Calculate the change in energy (modified)
+      int delta_E = 0.5*lattice(ix, iy)*
+	(lattice(ix, periodic(iy,n_spin,-1)) +
+	 lattice(periodic(ix,n_spin,-1), iy) +
+	 lattice(ix, periodic(iy,n_spin,1)) +
+	 lattice(periodic(ix,n_spin,1), iy));
+      
+      // Metropolis test
+      if ( distribution(gen) <= Energy_changes[delta_E] ){
 	
-	// Select random position
-	int ix = distribution(gen)*n_spin;
-	int iy = distribution(gen)*n_spin;
+	// Flip spin
+	lattice(ix, iy) *= -1.0;
 	
-	// Calculate the change in energy (modified)
-	int delta_E = 0.5*lattice(ix, iy)*
-	  (lattice(ix, periodic(iy,n_spin,-1)) +
-	   lattice(periodic(ix,n_spin,-1), iy) +
-	   lattice(ix, periodic(iy,n_spin,1)) +
-	   lattice(periodic(ix,n_spin,1), iy));
+	// Update energy and magnetisation
+	E += 4.0*delta_E;
+	M += 2.0*lattice(ix, iy);
 	
-	// Metropolis test
-	if ( distribution(gen) <= Energy_changes[delta_E] ){
-	  
-	  // Flip spin
-	  lattice(ix, iy) *= -1.0;
-	  
-	  // Update energy and magnetisation
-	  E += 4.0*delta_E;
-	  M += 2.0*lattice(ix, iy);
-
-	}
-
       }
+      
     }
-
+    
   }
-
+  
   // Monte Carlo sampling
   for (int cycles = 1; cycles <= (n_cycles - n_equilibration); cycles++){
     
     accepted = 0;
     
     // Sweep over the lattice
-    for (int x = 0; x < n_spin; x++) {
-      for (int y = 0; y < n_spin; y++){
+    for (int sweep = 0; sweep < n_spin*n_spin; sweep++) {
+      
+      // Select random position
+      int ix = distribution(gen)*n_spin;
+      int iy = distribution(gen)*n_spin;
+      
+      // Calculate the change in energy (modified)
+      int delta_E = 0.5*lattice(ix, iy)*
+	(lattice(ix, periodic(iy,n_spin,-1)) +
+	 lattice(periodic(ix,n_spin,-1), iy) +
+	 lattice(ix, periodic(iy,n_spin,1)) +
+	 lattice(periodic(ix,n_spin,1), iy));
+      
+      // Metropolis test
+      if ( distribution(gen) <= Energy_changes[delta_E] ){
 	
-	// Select random position
-	int ix = distribution(gen)*n_spin;
-	int iy = distribution(gen)*n_spin;
+	// Flip spin
+	lattice(ix, iy) *= -1.0;
 	
-	// Calculate the change in energy (modified)
-	int delta_E = 0.5*lattice(ix, iy)*
-	  (lattice(ix, periodic(iy,n_spin,-1)) +
-	   lattice(periodic(ix,n_spin,-1), iy) +
-	   lattice(ix, periodic(iy,n_spin,1)) +
-	   lattice(periodic(ix,n_spin,1), iy));
+	// Update energy and magnetisation
+	E += 4.0*delta_E;
+	M += 2.0*lattice(ix, iy);
 	
-	// Metropolis test
-	if ( distribution(gen) <= Energy_changes[delta_E] ){
-	  
-	  // Flip spin
-	  lattice(ix, iy) *= -1.0;
-	  
-	  // Update energy and magnetisation
-	  E += 4.0*delta_E;
-	  M += 2.0*lattice(ix, iy);
-	  
-	  accepted += 1;
-	  
-	}
+	accepted += 1;
 	
       }
-    }
       
+    }
+    
     // Add contribution to expectation values
     values(0) += E; values(1) += E*E;
     values(2) += M; values(3) += M*M;
