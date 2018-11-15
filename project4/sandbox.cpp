@@ -8,16 +8,12 @@ using namespace arma;
 int main(int argc, char* argv[])
 {
 
-  double Z = exp(8) + exp(-8) + 6;
-  double E = 8*(exp(-8) - exp(8))/Z;
-  double M = 4*(exp(8) + 2)/Z;
-  double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z);
-  double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z);
+  int n = 10;
 
-  cout << E << " " << M << " " << C_V << " " << khi << endl;
+  for (int i = 1; i <= 0; i++){
+
+    cout << i << endl;
+  }
   
-  vec A = zeros<mat>(5);
-  cout << A[-1] << endl;
-
   return 0;
 }

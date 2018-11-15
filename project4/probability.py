@@ -10,9 +10,6 @@ if len(sys.argv) <= 1:
 else:
     datafile = sys.argv[1]
 
-# Define the equilibration time
-equilibrium = 20000
-
 # Open input data file and read in the results
 with open(datafile, 'r') as infile:
 
@@ -36,7 +33,7 @@ plt.ylabel("Probability")
 plt.title("Probability distribution")
 
 # Plot
-plt.hist(energy[equilibrium:], bins=1000)
+plt.hist(energy, bins=1000)
 
 plt.show()
 

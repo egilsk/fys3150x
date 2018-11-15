@@ -8,3 +8,11 @@ main.o:		main.cpp
 
 ising.o: 	ising.cpp
 			${CPPflags} -c ising.cpp
+
+
+
+sandbox:	sandbox.o
+			${CPPflags} sandbox.o -o sandbox.exe
+
+sandbox.o:	sandbox.cpp
+			${CPPflags} -c sandbox.cpp

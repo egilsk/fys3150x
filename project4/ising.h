@@ -14,7 +14,7 @@ using namespace arma;
 void Initialise(mat&, double&, double&, int);
 
 // Monte Carlo sampling with the Metropolis algorithm
-void Metropolis(vec&, double, int, int, ofstream&);
+void Metropolis(vec&, double, int, int, int, ofstream&);
 
 // Create header
 void Header(ofstream&, int);
