@@ -28,12 +28,12 @@ with open(datafile, 'r') as infile:
 # Create and set up a figure
 fig1 = plt.figure()
 plt.xlabel("Energy [J]")
-plt.ylabel("Probability")
+plt.ylabel("Probability density")
 #plt.axis([0, n_cycles, -10, 10])
 plt.title("Probability distribution")
 
 # Plot
-plt.hist(energy, bins=1000)
+plt.hist(energy, bins="auto", density="True")
 
 plt.show()
 
