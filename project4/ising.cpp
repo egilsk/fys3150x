@@ -39,7 +39,7 @@ void Initialise(mat& lattice, double& energy, double& magnetic_moment, int n_spi
 
 
 // Run the Monte Carlo sampling with the Metropolis algorithm
-void Metropolis(vec& values, mat& equilibrium, double T, int n_spin, int n_cycles, int n_equilibration)
+void Metropolis(vec& values, mat& analysis, double T, int n_spin, int n_cycles, int n_equilibration)
 {
   // Initialise the seed generator
   random_device rd;
@@ -135,13 +135,10 @@ void Metropolis(vec& values, mat& equilibrium, double T, int n_spin, int n_cycle
     values(2) += M; values(3) += M*M;
     values(4) += fabs(M);
     
-    equilibrium(0, cycles) = (double) accepted/((cycles+1)*(n_cycles - n_equilibration));
-    equilibrium(1, cycles) = values(0)/(cycles+1);
-    equilibrium(2, cycles) = values(4)/(cycles+1);
-    
-    // Write to file (for probability analysis)
-    //ofile << setw(16) << setprecision(8) << E << endl;
-    
+    analysis(0, cycles) = (double) accepted/((cycles+1)*n_spin*n_spin);
+    analysis(1, cycles) = values(0)/(cycles+1);
+    analysis(2, cycles) = values(4)/(cycles+1);
+    analysis(3, cycles) = E;
   }
   
   // Divide by number of cycles
@@ -152,11 +149,12 @@ void Metropolis(vec& values, mat& equilibrium, double T, int n_spin, int n_cycle
   
   }
 
-// Create header for the output file
-void Header(ofstream& ofile, int n_cycles, int n_equilibration)
+// Create header for the output file (expectation values)
+void Header_expectation(ofstream& ofile, int n_cycles, int n_equilibration, int n_temp)
 {
   ofile << setiosflags(ios::showpoint | ios::left);
   ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
+  ofile << "Number of Temperatures: " << n_temp << endl;
   ofile << setw(16) << "Temperature";
   ofile << setw(16) << "Energy";
   ofile << setw(16) << "Magnetisation";
@@ -164,27 +162,65 @@ void Header(ofstream& ofile, int n_cycles, int n_equilibration)
   ofile << setw(16) << "Susceptibility" << endl;
 }
 
+// Create header (for equilibration analysis)
+void Header_equilibration(ofstream& ofile, int n_cycles, int n_equilibration)
+{
+  ofile << setiosflags(ios::showpoint | ios::left);
+  ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
+  ofile << setw(16) << "Energy";
+  ofile << setw(16) << "Magnetisation";
+  ofile << setw(16) << "Number_of_Accepted_Moves" << endl;
+}
 
-// Write the results to the output file
-void Output(ofstream& ofile, mat values, vec T, int n_spin)
+// Create header (for probability analysis)
+void Header_probability(ofstream& ofile, int n_cycles, int n_equilibration)
+{
+  ofile << setiosflags(ios::showpoint | ios::left);
+  ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
+  ofile << setw(16) << "Energy" << endl;
+}
+
+// Write the results to the output file (expectation values)
+void Output_expectation(ofstream& ofile, mat values, vec T, int n_spin)
 {
   // Loop over temperature
   for (int i = 0; i < T.n_elem; i++){ 
-  
+    
     // Find variance
     double E_variance = (values(1,i) - values(0,i)*values(0,i));
     double M_variance = (values(3,i) - values(4,i)*values(4,i));
     
     // Divide by number of spins
     double norm = 1.0/(n_spin*n_spin);
-
+    
     // Write to file
     ofile << setw(16) << setprecision(8) << T(i);
     ofile << setw(16) << setprecision(8) << values(0,i)*norm;
     ofile << setw(16) << setprecision(8) << values(4,i)*norm;
     ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
     ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
-
+    
   }
+}
 
+// Write to file (for equilibration analysis)
+void Output_equilibration(ofstream& ofile, mat analysis, int n_spin, int n_cycles, int n_equilibration)
+{
+  // Loop over cycles
+  for (int i = 0; i < (n_cycles - n_equilibration); i++){
+    ofile << setw(16) << setprecision(8) << analysis(1,i)/(n_spin*n_spin);
+    ofile << setw(16) << setprecision(8) << analysis(2,i)/(n_spin*n_spin);
+    ofile << setw(16) << setprecision(8) << analysis(0,i) << endl;
+  }  
+}
+
+
+// Write to file (for probability analysis)
+void Output_probability(ofstream& ofile, mat analysis, int n_cycles, int n_equilibration)
+{
+  // Loop over cycles
+  for (int i = 0; i < (n_cycles - n_equilibration); i++){
+    ofile << setw(16) << setprecision(8) << analysis(3,i) << endl;
+  }
+  
 }

@@ -38,25 +38,16 @@ int main(int argc, char* argv[])
   // Open output file
   ofile.open("ising.dat");
   // Create header
-  //Header(ofile, n_cycles, n_equilibration);
-
-  // Create header (for equilibration analysis)
-  ofile << setiosflags(ios::showpoint | ios::left);
-  ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
-  ofile << setw(16) << "Energy";
-  ofile << setw(16) << "Magnetisation";
-  ofile << setw(16) << "Number_of_Accepted_Moves" << endl;
-
-  // Create header (for probability analysis)
-  //ofile << setiosflags(ios::showpoint | ios::left);
-  //ofile << "Number of MC cycles: " << n_cycles << endl;
-  //ofile << setw(16) << "Energy" << endl;
+  Header_expectation(ofile, n_cycles, n_equilibration, n_temp);
+  //Header_equilibration(ofile, n_cycles, n_equilibration);
+  //Header_probability(ofile, n_cycles, n_equilibration);
+  
 
   // Declare a matrix which stores the expectation values
   mat values = zeros<mat>(5, n_temp);
 
-  // Declare a matrix which stores variables for equilibration analysis 
-  mat equilibrium = zeros<mat>(3, n_cycles);
+  // Declare a matrix which stores variables for equilibration and probability analysis 
+  mat analysis = zeros<mat>(4, n_cycles);
   
   // Declare a vector which stores the temperatures
   vec temperature = linspace(T_start, T_end, n_temp);
@@ -71,23 +62,17 @@ int main(int argc, char* argv[])
     vec tmp(5);
     
     // Run Monte Carlo sampling
-    Metropolis(tmp, equilibrium, temperature[i], n_spin, n_cycles, n_equilibration);  
+    Metropolis(tmp, analysis, temperature[i], n_spin, n_cycles, n_equilibration);  
     
     values.col(i) = tmp;
     
  }
 
   // Write to file
-  //Output(ofile, values, temperature, n_spin);
+  Output_expectation(ofile, values, temperature, n_spin);
+  //Output_equilibration(ofile, analysis, n_spin, n_cycles, n_equilibration);
+  //Output_probability(ofile, analysis, n_cycles, n_equilibration);
   
-  // Write to file (for equilibration analysis)
-  for (int i = 1; i <= (n_cycles - n_equilibration); i++){
-    ofile << setw(16) << setprecision(8) << equilibrium(1,i);
-    ofile << setw(16) << setprecision(8) << equilibrium(2,i);
-    ofile << setw(16) << setprecision(8) << equilibrium(0,i) << endl;
-  }
-
-
   double finish = omp_get_wtime();
   double time_used = finish - start;
   cout << time_used << endl;

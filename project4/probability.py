@@ -33,7 +33,7 @@ plt.ylabel("Probability density")
 plt.title("Probability distribution")
 
 # Plot
-plt.hist(energy, bins="auto", density="True")
+plt.hist(energy) #, bins="auto", density="True")
 
 plt.show()
 
