@@ -1,0 +1,18 @@
+CPPflags = c++ -O3 -fopenmp -std=c++11 -I/uio/hume/student-u29/egilsk/Downloads/armadillo-9.200.4/include
+
+main:		main.o ising.o
+			${CPPflags} main.o ising.o -o main.exe -L/uio/hume/student-u29/egilsk/Downloads/armadillo-9.200.4/build -larmadillo 
+
+main.o:		main.cpp 
+			${CPPflags} -c main.cpp
+
+ising.o: 	ising.cpp
+			${CPPflags} -c ising.cpp
+
+
+
+sandbox:	sandbox.o
+			${CPPflags} sandbox.o -o sandbox.exe
+
+sandbox.o:	sandbox.cpp
+			${CPPflags} -c sandbox.cpp
