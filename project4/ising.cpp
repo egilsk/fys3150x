@@ -39,24 +39,8 @@ void Initialise(mat& lattice, double& energy, double& magnetic_moment, int n_spi
 
 
 // Run the Monte Carlo sampling with the Metropolis algorithm
-void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibration, ofstream& ofile)
+void Metropolis(vec& values, mat& equilibrium, double T, int n_spin, int n_cycles, int n_equilibration)
 {
-
-  // Create header (for equilibration analysis)
-  //ofile << setiosflags(ios::showpoint | ios::left);
-  //ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
-  //ofile << setw(16) << "Energy";
-  //ofile << setw(16) << "Magnetisation";
-  //ofile << setw(16) << "Number_of_Accepted_Moves" << endl;
-  
-  // Declare a counter for the number of accepted moves
-  //int accepted;
-
-  // Create header (for probability analysis)
-  //ofile << setiosflags(ios::showpoint | ios::left);
-  //ofile << "Number of MC cycles: " << n_cycles << endl;
-  //ofile << setw(16) << "Energy" << endl;
-
   // Initialise the seed generator
   random_device rd;
   // Call the Mersenne Twister generator
@@ -77,11 +61,6 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
   for (int i = -2; i <= 2; i++) E_changes(i+2) = exp(-4*i/T);
   // Define pointer to access energy changes
   double* Energy_changes = &E_changes(2);
-  
-#pragma omp parallel default(shared) private(cycles, E, M) reduction(+:values(0),values(1),values(2),values(3),values(4))
-  {
-    
-#pragma omp for
     
   // Equilibration cycles
   for (int cycles = 1; cycles <= n_equilibration; cycles++){
@@ -115,13 +94,12 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
     }
     
   }
-  
-#pragma omp for
+
+  // Declare a counter for the number of accepted moves
+  unsigned long long accepted = 0;
 
   // Monte Carlo sampling
-  for (int cycles = 1; cycles <= (n_cycles - n_equilibration); cycles++){
-    
-    //accepted = 0;
+  for (int cycles = 0; cycles < (n_cycles - n_equilibration); cycles++){
     
     // Sweep over the lattice
     for (int sweep = 0; sweep < n_spin*n_spin; sweep++) {
@@ -147,10 +125,9 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
 	E += 4.0*delta_E;
 	M += 2.0*lattice(ix, iy);
 	
-	//accepted += 1;
-	
+	accepted += 1;
       }
-
+      
     }
     
     // Add contribution to expectation values
@@ -158,24 +135,22 @@ void Metropolis(vec& values, double T, int n_spin, int n_cycles, int n_equilibra
     values(2) += M; values(3) += M*M;
     values(4) += fabs(M);
     
-    // Write to file (for equilibration analysis)
-    //ofile << setw(16) << setprecision(8) << values(0)/cycles;
-    //ofile << setw(16) << setprecision(8) << values(4)/cycles;
-    //ofile << setw(16) << setprecision(8) << accepted << endl;
+    equilibrium(0, cycles) = (double) accepted/((cycles+1)*(n_cycles - n_equilibration));
+    equilibrium(1, cycles) = values(0)/(cycles+1);
+    equilibrium(2, cycles) = values(4)/(cycles+1);
     
     // Write to file (for probability analysis)
     //ofile << setw(16) << setprecision(8) << E << endl;
     
   }
-  }
   
   // Divide by number of cycles
   double norm = 1.0/(n_cycles - n_equilibration);
-  
+
   // Find expectation values
   values *= norm;
   
-}
+  }
 
 // Create header for the output file
 void Header(ofstream& ofile, int n_cycles, int n_equilibration)
@@ -191,16 +166,25 @@ void Header(ofstream& ofile, int n_cycles, int n_equilibration)
 
 
 // Write the results to the output file
-void Output(ofstream& ofile, vec values, double T)
+void Output(ofstream& ofile, mat values, vec T, int n_spin)
 {
-  // Find variance
-  double E_variance = (values(1) - values(0)*values(0));
-  double M_variance = (values(3) - values(4)*values(4));
+  // Loop over temperature
+  for (int i = 0; i < T.n_elem; i++){ 
   
-  // Write to file
-  ofile << setw(16) << setprecision(8) << T;
-  ofile << setw(16) << setprecision(8) << values(0);
-  ofile << setw(16) << setprecision(8) << values(4);
-  ofile << setw(16) << setprecision(8) << E_variance/(T*T);
-  ofile << setw(16) << setprecision(8) << M_variance/T << endl;
+    // Find variance
+    double E_variance = (values(1,i) - values(0,i)*values(0,i));
+    double M_variance = (values(3,i) - values(4,i)*values(4,i));
+    
+    // Divide by number of spins
+    double norm = 1.0/(n_spin*n_spin);
+
+    // Write to file
+    ofile << setw(16) << setprecision(8) << T(i);
+    ofile << setw(16) << setprecision(8) << values(0,i)*norm;
+    ofile << setw(16) << setprecision(8) << values(4,i)*norm;
+    ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
+    ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
+
+  }
+
 }

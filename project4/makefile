@@ -1,4 +1,4 @@
-CPPflags = c++ -std=c++11 -larmadillo
+CPPflags = c++ -fopenmp -std=c++11 -larmadillo
 CPPflags1 = c++ -fopenmp -std=c++11 -larmadillo
 
 main:		main.o ising.o

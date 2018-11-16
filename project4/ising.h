@@ -15,13 +15,13 @@ using namespace arma;
 void Initialise(mat&, double&, double&, int);
 
 // Monte Carlo sampling with the Metropolis algorithm
-void Metropolis(vec&, double, int, int, int, ofstream&);
+void Metropolis(vec&, mat&, double, int, int, int);
 
 // Create header
 void Header(ofstream&, int, int);
 
 // Write to file
-void Output(ofstream&, vec, double);
+void Output(ofstream&, mat, vec, int);
 
 // Periodic boundary condition
 inline int periodic(int i, int limit, int add) { return (limit + i + add) % (limit); }
