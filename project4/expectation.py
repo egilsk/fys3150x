@@ -18,6 +18,9 @@ with open(datafile, 'r') as infile:
     # Read number of temperatures
     n_temp = int(infile.readline().split()[-1])
 
+    # Read number of spins
+    n_spin = int(infile.readline().split()[-1])
+
     # Read number of variables
     n_variables = len(infile.readline().split())
     
@@ -27,8 +30,6 @@ with open(datafile, 'r') as infile:
     # Read the data
     for i in range(n_temp):
         data[i] = infile.readline().split()
-
-print data
 
 # ENERGY
 

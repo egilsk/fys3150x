@@ -150,11 +150,12 @@ void Metropolis(vec& values, mat& analysis, double T, int n_spin, int n_cycles, 
   }
 
 // Create header for the output file (expectation values)
-void Header_expectation(ofstream& ofile, int n_cycles, int n_equilibration, int n_temp)
+void Header_expectation(ofstream& ofile, int n_cycles, int n_equilibration, int n_temp, int n_spin)
 {
   ofile << setiosflags(ios::showpoint | ios::left);
   ofile << "Number of MC cycles: " << n_cycles - n_equilibration << endl;
   ofile << "Number of Temperatures: " << n_temp << endl;
+  ofile << "Number of Spins: " << n_spin << endl;
   ofile << setw(16) << "Temperature";
   ofile << setw(16) << "Energy";
   ofile << setw(16) << "Magnetisation";

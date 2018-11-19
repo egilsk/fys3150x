@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
   // Open output file
   ofile.open("ising.dat");
   // Create header
-  Header_expectation(ofile, n_cycles, n_equilibration, n_temp);
+  Header_expectation(ofile, n_cycles, n_equilibration, n_temp, n_spin);
   //Header_equilibration(ofile, n_cycles, n_equilibration);
   //Header_probability(ofile, n_cycles, n_equilibration);
   

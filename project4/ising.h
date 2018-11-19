@@ -18,7 +18,7 @@ void Initialise(mat&, double&, double&, int);
 void Metropolis(vec&, mat&, double, int, int, int);
 
 // Create header (expectation values)
-void Header_expectation(ofstream&, int, int, int);
+void Header_expectation(ofstream&, int, int, int, int);
 
 // Create header (equilibration analysis)
 void Header_equilibration(ofstream&, int, int);
