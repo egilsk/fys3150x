@@ -18,12 +18,12 @@ int main(int argc, char* argv[])
 {
   // Declare parameters read from the command line
   int n_spin, n_cycles, n_equilibration, n_temp;
-  double T_start, T_end, T_step;
+  double T_start, T_end;
   
   // Read from the command line
-  if (argc <= 5) {
+  if (argc <= 6) {
     cout << "Error: " << argv[0] << 
-      " reads # of spins, # of MC cycles, # of equilibration cycles, initial and final temperature and temperature step" << endl;
+      " reads # of spins, # of MC cycles, # of equilibration cycles, initial and final temperature and # of temperatures" << endl;
     exit(1);
   }
   else{
@@ -42,15 +42,14 @@ int main(int argc, char* argv[])
   //Header_equilibration(ofile, n_cycles, n_equilibration);
   //Header_probability(ofile, n_cycles, n_equilibration);
   
+  // Declare a vector which stores the temperatures
+  vec temperature = linspace(T_start, T_end, n_temp);
 
   // Declare a matrix which stores the expectation values
   mat values = zeros<mat>(5, n_temp);
 
   // Declare a matrix which stores variables for equilibration and probability analysis 
   mat analysis = zeros<mat>(4, n_cycles);
-  
-  // Declare a vector which stores the temperatures
-  vec temperature = linspace(T_start, T_end, n_temp);
     
   // Time the loop
   double start = omp_get_wtime();
@@ -62,7 +61,7 @@ int main(int argc, char* argv[])
     vec tmp(5);
     
     // Run Monte Carlo sampling
-    Metropolis(tmp, analysis, temperature[i], n_spin, n_cycles, n_equilibration);  
+    Metropolis(tmp, analysis, temperature[i], n_spin, n_cycles, n_equilibration);
     
     values.col(i) = tmp;
     
@@ -87,7 +86,7 @@ int main(int argc, char* argv[])
   double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z);
   double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z);
 
-  //cout << E << " " << M << " " << C_V << " " << khi << endl;
+  cout << E/4.0 << " " << M/4.0 << " " << C_V/4.0 << " " << khi/4.0 << endl;
 
   return 0;
 }
