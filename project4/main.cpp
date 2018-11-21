@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   double start = omp_get_wtime();
   
   // Loop over temperatures
-#pragma omp parallel for
+  #pragma omp parallel for
   for (int i = 0; i < n_temp; i++){
   
     vec tmp(5);
