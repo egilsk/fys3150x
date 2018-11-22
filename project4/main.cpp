@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <string>
-#include "omp.h"
+//#include "omp.h"
 
 #include "ising.h"
 
@@ -52,12 +52,17 @@ int main(int argc, char* argv[])
   mat analysis = zeros<mat>(4, n_cycles);
     
   // Time the loop
-  double start = omp_get_wtime();
+  //double start = omp_get_wtime();
   
+  mat average = zeros<mat>(9,1);
+  int counter = 0;
+
+  while (counter < 100) {
+
   // Loop over temperatures
-  #pragma omp parallel for
+  //#pragma omp parallel for
   for (int i = 0; i < n_temp; i++){
-  
+    
     vec tmp(5);
     
     // Run Monte Carlo sampling
@@ -65,16 +70,32 @@ int main(int argc, char* argv[])
     
     values.col(i) = tmp;
     
- }
+  }
 
+  average(0,0) += values(0,0);
+  average(1,0) += values(1,0);
+  average(2,0) += values(2,0);
+  average(3,0) += values(3,0);
+  average(4,0) += values(4,0);
+  average(5,0) += (values(1,0) - values(0,0)*values(0,0));
+  average(6,0) += (values(1,0) - values(0,0)*values(0,0))*(values(1,0) - values(0,0)*values(0,0));
+  average(7,0) += (values(3,0) - values(4,0)*values(4,0));
+  average(8,0) += (values(3,0) - values(4,0)*values(4,0))*(values(3,0) - values(4,0)*values(4,0));
+  
+  counter += 1;
+
+  }
+
+  average /= 100;
+  
   // Write to file
-  Output_expectation(ofile, values, temperature, n_spin);
+  Output_expectation(ofile, average, temperature, n_spin);
   //Output_equilibration(ofile, analysis, n_spin, n_cycles, n_equilibration);
   //Output_probability(ofile, analysis, n_cycles, n_equilibration);
   
-  double finish = omp_get_wtime();
-  double time_used = finish - start;
-  cout << time_used << endl;
+  //double finish = omp_get_wtime();
+  //double time_used = finish - start;
+  //cout << time_used << endl;
 
   ofile.close();
 

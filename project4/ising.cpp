@@ -191,6 +191,9 @@ void Output_expectation(ofstream& ofile, mat values, vec T, int n_spin)
     double E_variance = (values(1,i) - values(0,i)*values(0,i));
     double M_variance = (values(3,i) - values(4,i)*values(4,i));
     
+    double CV_variance = (values(6,i) - values(5,i)*values(5,i));
+    double chi_variance = (values(8,i) - values(7,i)*values(7,i));
+    
     // Divide by number of spins
     double norm = 1.0/(n_spin*n_spin);
     
@@ -198,8 +201,15 @@ void Output_expectation(ofstream& ofile, mat values, vec T, int n_spin)
     ofile << setw(16) << setprecision(8) << T(i);
     ofile << setw(16) << setprecision(8) << values(0,i)*norm;
     ofile << setw(16) << setprecision(8) << values(4,i)*norm;
-    ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
-    ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
+    ofile << setw(16) << setprecision(8) << values(5,i)*norm;
+    ofile << setw(16) << setprecision(8) << values(7,i)*norm << endl;
+    ofile << setw(16) << setprecision(8) << sqrt(E_variance*norm*norm);
+    ofile << setw(16) << setprecision(8) << sqrt(M_variance*norm*norm);
+    ofile << setw(16) << setprecision(8) << sqrt(CV_variance*norm*norm);
+    ofile << setw(16) << setprecision(8) << sqrt(chi_variance*norm*norm) << endl;
+
+    //ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
+    //ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
     
   }
 }
