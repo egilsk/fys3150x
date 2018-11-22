@@ -33,7 +33,7 @@ void Output_expectation(ofstream&, mat, vec, int);
 void Output_equilibration(ofstream&, mat, int, int, int);
 
 // Write to file (expectation values)
-void Output_probability(ofstream&, mat, int, int);
+void Output_probability(ofstream&, mat, int, int, int);
 
 // Periodic boundary condition
 inline int periodic(int i, int limit, int add) { return (limit + i + add) % (limit); }

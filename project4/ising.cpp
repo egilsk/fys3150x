@@ -198,7 +198,7 @@ void Output_expectation(ofstream& ofile, mat values, vec T, int n_spin)
     ofile << setw(16) << setprecision(8) << T(i);
     ofile << setw(16) << setprecision(8) << values(0,i)*norm;
     ofile << setw(16) << setprecision(8) << values(4,i)*norm;
-    ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
+    ofile << setw(16) << setprecision(8) << E_variance*norm*norm; ///(T(i)*T(i))*norm;
     ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
     
   }
@@ -217,11 +217,11 @@ void Output_equilibration(ofstream& ofile, mat analysis, int n_spin, int n_cycle
 
 
 // Write to file (for probability analysis)
-void Output_probability(ofstream& ofile, mat analysis, int n_cycles, int n_equilibration)
+void Output_probability(ofstream& ofile, mat analysis, int n_spin, int n_cycles, int n_equilibration)
 {
   // Loop over cycles
   for (int i = 0; i < (n_cycles - n_equilibration); i++){
-    ofile << setw(16) << setprecision(8) << analysis(3,i) << endl;
+    ofile << setw(16) << setprecision(8) << analysis(3,i)/(n_spin*n_spin) << endl;
   }
   
 }
