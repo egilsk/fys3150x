@@ -32,37 +32,43 @@ with open(datafile, 'r') as infile:
 fig1 = plt.figure()
 plt.xlabel("MC cycles")
 plt.ylabel("Energy [J]")
-#plt.axis([0, n_cycles, -10, 10])
-plt.title("Equilibration time for the energy")
+plt.axis([0, n_cycles, -2.0, -1.99])
+plt.title("Equilibration of the Energy (T = 1.0, unordered)")
 
 # Plot
 plt.plot(cycles, data[:,0], 'o', ms=1)
+
+# Save the plot
+#plt.savefig("ising_energy.png")
 
 # MAGNETISATION
 
 # Create and set up a figure
 fig2 = plt.figure()
 plt.xlabel("MC cycles")
-plt.ylabel("Magnetisation [# of spins]")
+plt.ylabel("Magnetisation [1]")
 #plt.axis([0, n_cycles, -5, 5])
-plt.title("Equilibration time for the magnetisation")
+plt.title("Equilibration of the Magnetisation (T = 1.0, unordered)")
 
 # Plot
 plt.plot(cycles, data[:,1], 'o', ms=1)
 
-# ACCEPTED MOVES
+# Save the plot
+#plt.savefig("ising_magnetisation.png")
+
+# ACCEPTANCE RATIO
 
 # Create and set up a figure
 fig3 = plt.figure()
 plt.xlabel("MC cycles")
-plt.ylabel("Number of accepted moves")
-#plt.axis([0, n_cycles, -5, 5])
-plt.title("Time development for the number of accepted moves")
+plt.ylabel("Acceptance ratio")
+#plt.axis([0, n_cycles, 0, 1])
+plt.title("Development of the Acceptance Ratio (T = 1.0, unordered)")
 
 # Plot
 plt.plot(cycles, data[:,2], 'o', ms=1)
 
-plt.show()
-
 # Save the plot
-#plt.savefig(datafile.replace(".dat",".png"))
+#plt.savefig("ising_acceptance.png")
+
+plt.show()

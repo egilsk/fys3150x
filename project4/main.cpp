@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
   // Open output file
   ofile.open("ising.dat");
   // Create header
-  Header_expectation(ofile, n_cycles, n_equilibration, n_temp, n_spin);
+  //Header_expectation(ofile, n_cycles, n_equilibration, n_temp, n_spin);
   //Header_equilibration(ofile, n_cycles, n_equilibration);
-  //Header_probability(ofile, n_cycles, n_equilibration);
+  Header_probability(ofile, n_cycles, n_equilibration);
   
   // Declare a vector which stores the temperatures
   vec temperature = linspace(T_start, T_end, n_temp);
@@ -54,11 +54,6 @@ int main(int argc, char* argv[])
   // Time the loop
   //double start = omp_get_wtime();
   
-  mat average = zeros<mat>(9,1);
-  int counter = 0;
-
-  while (counter < 100) {
-
   // Loop over temperatures
   //#pragma omp parallel for
   for (int i = 0; i < n_temp; i++){
@@ -71,27 +66,11 @@ int main(int argc, char* argv[])
     values.col(i) = tmp;
     
   }
-
-  average(0,0) += values(0,0);
-  average(1,0) += values(1,0);
-  average(2,0) += values(2,0);
-  average(3,0) += values(3,0);
-  average(4,0) += values(4,0);
-  average(5,0) += (values(1,0) - values(0,0)*values(0,0));
-  average(6,0) += (values(1,0) - values(0,0)*values(0,0))*(values(1,0) - values(0,0)*values(0,0));
-  average(7,0) += (values(3,0) - values(4,0)*values(4,0));
-  average(8,0) += (values(3,0) - values(4,0)*values(4,0))*(values(3,0) - values(4,0)*values(4,0));
-  
-  counter += 1;
-
-  }
-
-  average /= 100;
   
   // Write to file
-  Output_expectation(ofile, average, temperature, n_spin);
+  //Output_expectation(ofile, values, temperature, n_spin);
   //Output_equilibration(ofile, analysis, n_spin, n_cycles, n_equilibration);
-  //Output_probability(ofile, analysis, n_cycles, n_equilibration);
+  Output_probability(ofile, analysis, n_cycles, n_equilibration);
   
   //double finish = omp_get_wtime();
   //double time_used = finish - start;
@@ -102,12 +81,12 @@ int main(int argc, char* argv[])
   // Analytical results for 2x2 lattice
 
   double Z = exp(8) + exp(-8) + 6;
-  double E = 8*(exp(-8) - exp(8))/Z;
-  double M = 4*(exp(8) + 2)/Z;
-  double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z);
-  double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z);
+  double E = 8*(exp(-8) - exp(8))/(Z*4.0);
+  double M = 4*(exp(8) + 2)/(Z*4.0);
+  double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z*4.0);
+  double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z*4.0);
 
-  cout << E/4.0 << " " << M/4.0 << " " << C_V/4.0 << " " << khi/4.0 << endl;
+  //cout << E << " " << M << " " << C_V << " " << khi << endl;
 
   return 0;
 }
