@@ -29,13 +29,12 @@ with open(datafile, 'r') as infile:
 fig1 = plt.figure()
 plt.xlabel("Energy [J]")
 plt.ylabel("Probability density")
-#plt.axis([0, n_cycles, -10, 10])
-plt.title("Probability distribution")
+plt.title("Probability distribution (T = 1.0)")
 
 # Plot
 plt.hist(energy) #, bins="auto", density="True")
 
-plt.show()
-
 # Save the plot
-#plt.savefig(datafile.replace(".dat",".png"))
+#plt.savefig("ising_probability.png")
+
+plt.show()
