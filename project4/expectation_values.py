@@ -42,40 +42,49 @@ plt.title("Mean energy as function of temperature")
 # Plot
 plt.plot(data[:,0], data[:,1])
 
+# Save the plot
+plt.savefig("energy60.png")
+
 # MAGNETISATION
 
 # Create and set up a figure
 fig2 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
-plt.ylabel("Magnetisation [# of spins]")
+plt.ylabel("Magnetisation [1]")
 plt.title("Mean magnetisation as function of temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,2])
+
+# Save the plot
+plt.savefig("magnetisation60.png")
 
 # HEAT CAPACITY
 
 # Create and set up a figure
 fig3 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
-plt.ylabel("Heat capacity []")
+plt.ylabel(r"Heat capacity [J$^2$/kT$^2$]")
 plt.title("Heat capacity as function of temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,3])
+
+# Save the plot
+plt.savefig("heat.png")
 
 # SUSCEPTIBILITY
 
 # Create and set up a figure
 fig4 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
-plt.ylabel("Susceptibility []")
+plt.ylabel("Susceptibility [1/kT]")
 plt.title("Susceptibility as function of temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,4])
 
-plt.show()
-
 # Save the plot
-#plt.savefig(datafile.replace(".dat",".png"))
+plt.savefig("susceptibility.png")
+
+plt.show()

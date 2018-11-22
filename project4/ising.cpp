@@ -135,10 +135,10 @@ void Metropolis(vec& values, mat& analysis, double T, int n_spin, int n_cycles, 
     values(2) += M; values(3) += M*M;
     values(4) += fabs(M);
     
-    analysis(0, cycles) = (double) accepted/((cycles+1)*n_spin*n_spin);
-    analysis(1, cycles) = values(0)/(cycles+1);
-    analysis(2, cycles) = values(4)/(cycles+1);
-    analysis(3, cycles) = E;
+    //analysis(0, cycles) = (double) accepted/((cycles+1)*n_spin*n_spin);
+    //analysis(1, cycles) = values(0)/(cycles+1);
+    //analysis(2, cycles) = values(4)/(cycles+1);
+    //analysis(3, cycles) = E;
   }
   
   // Divide by number of cycles
@@ -198,7 +198,7 @@ void Output_expectation(ofstream& ofile, mat values, vec T, int n_spin)
     ofile << setw(16) << setprecision(8) << T(i);
     ofile << setw(16) << setprecision(8) << values(0,i)*norm;
     ofile << setw(16) << setprecision(8) << values(4,i)*norm;
-    ofile << setw(16) << setprecision(8) << E_variance*norm*norm; ///(T(i)*T(i))*norm;
+    ofile << setw(16) << setprecision(8) << E_variance/(T(i)*T(i))*norm;
     ofile << setw(16) << setprecision(8) << M_variance/T(i)*norm << endl;
     
   }

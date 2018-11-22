@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <string>
-//#include "omp.h"
+#include "omp.h"
 
 #include "ising.h"
 
@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
   // Open output file
   ofile.open("ising.dat");
   // Create header
-  //Header_expectation(ofile, n_cycles, n_equilibration, n_temp, n_spin);
+  Header_expectation(ofile, n_cycles, n_equilibration, n_temp, n_spin);
   //Header_equilibration(ofile, n_cycles, n_equilibration);
-  Header_probability(ofile, n_cycles, n_equilibration);
+  //Header_probability(ofile, n_cycles, n_equilibration);
   
   // Declare a vector which stores the temperatures
   vec temperature = linspace(T_start, T_end, n_temp);
@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
   mat analysis = zeros<mat>(4, n_cycles);
     
   // Time the loop
-  //double start = omp_get_wtime();
+  double start = omp_get_wtime();
   
   // Loop over temperatures
-  //#pragma omp parallel for
+#pragma omp parallel for
   for (int i = 0; i < n_temp; i++){
     
     vec tmp(5);
@@ -68,13 +68,13 @@ int main(int argc, char* argv[])
   }
   
   // Write to file
-  //Output_expectation(ofile, values, temperature, n_spin);
+  Output_expectation(ofile, values, temperature, n_spin);
   //Output_equilibration(ofile, analysis, n_spin, n_cycles, n_equilibration);
-  Output_probability(ofile, analysis, n_spin, n_cycles, n_equilibration);
+  //Output_probability(ofile, analysis, n_spin, n_cycles, n_equilibration);
   
-  //double finish = omp_get_wtime();
-  //double time_used = finish - start;
-  //cout << time_used << endl;
+  double finish = omp_get_wtime();
+  double time_used = finish - start;
+  cout << time_used << endl;
 
   ofile.close();
 
