@@ -11,7 +11,7 @@ else:
 
 # Open input data file and read in the results
 with open(datafile, 'r') as infile:
-    
+
     # Read number of MC cycles
     n_cycles = int(infile.readline().split()[-1])
 
@@ -23,7 +23,7 @@ with open(datafile, 'r') as infile:
 
     # Read number of variables
     n_variables = len(infile.readline().split())
-    
+
     # Create array storing the data
     data = np.zeros((n_temp,n_variables))
 
@@ -37,7 +37,7 @@ with open(datafile, 'r') as infile:
 fig1 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
 plt.ylabel("Energy [J]")
-plt.title("Mean energy as function of temperature")
+plt.title("Mean Energy as Function of Temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,1])
@@ -51,7 +51,7 @@ plt.savefig("energy60.png")
 fig2 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
 plt.ylabel("Magnetisation [1]")
-plt.title("Mean magnetisation as function of temperature")
+plt.title("Mean Magnetisation as Function of Temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,2])
@@ -65,13 +65,13 @@ plt.savefig("magnetisation60.png")
 fig3 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
 plt.ylabel(r"Heat capacity [J$^2$/kT$^2$]")
-plt.title("Heat capacity as function of temperature")
+plt.title("Heat Capacity as Function of Temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,3])
 
 # Save the plot
-plt.savefig("heat.png")
+plt.savefig("heat60.png")
 
 # SUSCEPTIBILITY
 
@@ -79,12 +79,12 @@ plt.savefig("heat.png")
 fig4 = plt.figure()
 plt.xlabel("Temperature [kT/J]")
 plt.ylabel("Susceptibility [1/kT]")
-plt.title("Susceptibility as function of temperature")
+plt.title("Susceptibility as Function of Temperature")
 
 # Plot
 plt.plot(data[:,0], data[:,4])
 
 # Save the plot
-plt.savefig("susceptibility.png")
+plt.savefig("susceptibility60.png")
 
 plt.show()
