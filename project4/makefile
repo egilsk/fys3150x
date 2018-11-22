@@ -15,10 +15,3 @@ test:		test.o ising.o
 
 test.o:		test.cpp
 			${CPPflags} -c test.cpp
-
-
-sandbox:	sandbox.o
-			${CPPflags} sandbox.o -o sandbox.exe
-
-sandbox.o:	sandbox.cpp
-			${CPPflags} -c sandbox.cpp
