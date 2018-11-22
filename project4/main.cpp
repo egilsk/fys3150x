@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
   // Declare a matrix which stores variables for equilibration and probability analysis 
   mat analysis = zeros<mat>(4, n_cycles);
-    
+  
   // Time the loop
   double start = omp_get_wtime();
   
@@ -67,25 +67,25 @@ int main(int argc, char* argv[])
     
   }
   
+  double finish = omp_get_wtime();
+  double time_used = finish - start;
+  cout << "Time used [s]: " << time_used << endl;
+  
   // Write to file
   Output_expectation(ofile, values, temperature, n_spin);
   //Output_equilibration(ofile, analysis, n_spin, n_cycles, n_equilibration);
   //Output_probability(ofile, analysis, n_spin, n_cycles, n_equilibration);
   
-  double finish = omp_get_wtime();
-  double time_used = finish - start;
-  cout << time_used << endl;
-
   ofile.close();
-
+  
   // Analytical results for 2x2 lattice
-
+  
   double Z = exp(8) + exp(-8) + 6;
   double E = 8*(exp(-8) - exp(8))/(Z*4.0);
   double M = 4*(exp(8) + 2)/(Z*4.0);
   double C_V = 128*(2 + 3*exp(8) + 3*exp(-8))/(Z*Z*4.0);
   double khi = 16*(3 + 3*exp(8) + exp(-8))/(Z*Z*4.0);
-
+  
   //cout << E << " " << M << " " << C_V << " " << khi << endl;
 
   return 0;
