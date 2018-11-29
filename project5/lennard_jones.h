@@ -9,13 +9,13 @@ class LennardJones
  private:
   
   // Physical constants
-  double m_G;
-  double m_solar_mass;
+  double m_epsilon;
+  double m_sigma;
 
  public:
   
   // Constructors
-  LennardJones(double G, double solar_mass);
+  LennardJones(double epsilon, double sigma);
   // Destructor
   ~LennardJones() {}
   

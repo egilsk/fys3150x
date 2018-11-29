@@ -1,9 +1,9 @@
 #include "lennard_jones.h"
 
-LennardJones::LennardJones(double G, double solar_mass)
+LennardJones::LennardJones(double epsilon, double sigma)
 {
-  m_G = G;
-  m_solar_mass = solar_mass;
+  m_epsilon = epsilon;
+  m_sigma = sigma;
 }
 
 void LennardJones::forces(System* system)

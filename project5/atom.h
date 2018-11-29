@@ -33,7 +33,6 @@ class Atom {
   double getPotential_energy() { return m_potential_energy; }
 
   // Setters
-  void setName(string name) { m_name = name; }
   void setPosition(vec3 position) { m_position = position; }
   void setVelocity(vec3 velocity) { m_velocity = velocity; }
   void setMass(double mass) { m_mass = mass; }

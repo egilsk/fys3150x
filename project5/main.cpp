@@ -34,12 +34,14 @@ int main (int argc, char* argv[]){
   System S;
   S.initialiseLattice(n_cells, b, temperature_initial);
   
+  /*
+
   // Declare and open output file
   ofstream ofile;
   ofile.open("MD.xyz");
   
   // Create header and write out the starting positions
-  S.header(ofile, n);
+  S.header(ofile, n_steps);
   S.output(ofile, t);
 
   // Initialise the force and the solver
@@ -81,9 +83,11 @@ int main (int argc, char* argv[]){
     // Write to file
     S.output(ofile, t);
   }
-  
+
   ofile.close();
   
+  */
+
   return 0;
 }
 

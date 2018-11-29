@@ -1,7 +1,10 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "celestialbody.h"
+#include "atom.h"
+
+#include <random>
+#include <armadillo>
 
 using namespace std;
 
@@ -15,17 +18,20 @@ class System {
   // Destructor
   ~System() {}
 
-  // Vector containing the solar system objects
-  vector<CelestialBody*> bodies;
+  // Vector containing the objects
+  vector<Atom*> bodies;
 
   // Add an object to the system 
-  void addObject(CelestialBody* new_body) { bodies.push_back(new_body); }
+  void addObject(Atom* new_body) { bodies.push_back(new_body); }
 
   // Reset the forces on the objects
   void resetForces();
 
   // Reset the potential energy of the objects
   void resetPotential();
+
+  // Initialise the FCC-lattice
+  void initialiseLattice(int n_cells, double b, double T);
 
   // Initialise and create header for an output file
   void header(ofstream& ofile, int);

@@ -1,4 +1,4 @@
-CPPflags = c++ -std=c++11
+CPPflags = c++ -std=c++11 -larmadillo
 
 main:			main.o vec3.o atom.o system.o gravity.o velocity_verlet.o
 				${CPPflags} main.o vec3.o atom.o system.o  gravity.o velocity_verlet.o -o main.exe
