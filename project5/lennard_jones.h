@@ -1,7 +1,7 @@
 #ifndef LENNARD_JONES_H
 #define LENNARD_JONES_H
 
-#include "lennard_jones.h"
+#include "system.h"
 
 class LennardJones
 {

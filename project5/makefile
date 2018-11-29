@@ -1,7 +1,7 @@
 CPPflags = c++ -std=c++11 -larmadillo
 
-main:			main.o vec3.o atom.o system.o gravity.o velocity_verlet.o
-				${CPPflags} main.o vec3.o atom.o system.o  gravity.o velocity_verlet.o -o main.exe
+main:			main.o vec3.o atom.o system.o lennard_jones.o velocity_verlet.o
+				${CPPflags} main.o vec3.o atom.o system.o  lennard_jones.o velocity_verlet.o -o main.exe
 
 main.o:			main.cpp 
 		        	${CPPflags} -c main.cpp
@@ -15,8 +15,8 @@ atom.o :		 atom.cpp
 system.o :		system.cpp	
 				${CPPflags} -c system.cpp
 
-gravity.o :		gravity.cpp
-				${CPPflags} -c gravity.cpp
+lennard_jones.o :	lennard_jones.cpp
+				${CPPflags} -c lennard_jones.cpp
 
 velocity_verlet.o:	velocity_verlet.cpp
 				${CPPflags} -c velocity_verlet.cpp

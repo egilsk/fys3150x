@@ -18,10 +18,10 @@ class VelocityVerlet
   vector<vec3> storeForces(System* system);
 
   // Update the positions of the objects in the system
-  void updatePosition(System* system, const double h, const vector<double> h_mass_two);
+  void updatePosition(System* system, const double h, const double h_mass_two);
 
   // Update the velocities of the objects in the system
-  void updateVelocity(System* system, const double h, const vector<double> h_mass_two, vector<vec3> forces_temp);
+  void updateVelocity(System* system, const double h, const double h_mass_two, vector<vec3> forces_temp);
 
 };
 

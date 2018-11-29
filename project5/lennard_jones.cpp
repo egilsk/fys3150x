@@ -22,7 +22,7 @@ void LennardJones::forces(System* system)
       r = r_vec.length();
       
       // Calculate the force from object j on i
-      force = r_vec * (-m_G) * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_solar_mass*pow(r,3.0));
+      force = r_vec * (-m_epsilon) * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_sigma*pow(r,3.0));
       system->bodies[i]->setForce(system->bodies[i]->getForce() + force);
       
       // Use N3L to calculate the force from object i on j
@@ -48,7 +48,7 @@ void LennardJones::potential(System* system)
       r = r_vec.length();
       
       // Calculate the potential energy for object i due to the force from object j
-      potential_energy = - m_G * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_solar_mass*r);
+      potential_energy = - m_epsilon * system->bodies[i]->getMass() * system->bodies[j]->getMass() / (m_sigma*r);
       system->bodies[i]->setPotential_energy(system->bodies[i]->getPotential_energy() + potential_energy);
       
       // Use symmetry to calculate the potential energy for object j due to the force from object i

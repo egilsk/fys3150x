@@ -4,7 +4,6 @@
 #include "atom.h"
 
 #include <random>
-#include <armadillo>
 
 using namespace std;
 
@@ -33,11 +32,8 @@ class System {
   // Initialise the FCC-lattice
   void initialiseLattice(int n_cells, double b, double T);
 
-  // Initialise and create header for an output file
-  void header(ofstream& ofile, int);
-  
   // Write the position of the objects to file
-  void output(ofstream& ofile, double);
+  void output(ofstream& ofile, int);
   
 };
 

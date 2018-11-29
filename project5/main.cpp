@@ -17,76 +17,70 @@ int main (int argc, char* argv[]){
   }
   else{
     n_steps = atoi(argv[1]);
-    time_final = atof(argv[2]); // []
+    time_final = atof(argv[2]);                                       // []
     n_cells = atoi(argv[3]);
-    temperature_initial = atof(argv[4]); // []
+    temperature_initial = atof(argv[4]);                              // []
   }
   
   // Define the step size
-  double h = time_final/n_steps; // []
-  // Initialise time
-  double t = 0.0; // []
+  double h = time_final/n_steps;
+
+  // Define epsilon and sigma
+  double epsilon = 1.0;                                               // []
+  double sigma = 1.0;                                                 // []
 
   // Define the lattice constant
-  double b = 5.26; // [Angstrom]
+  double b = 5.26;                                                    // [Angstrom]
   
   // Initialise the system
   System S;
   S.initialiseLattice(n_cells, b, temperature_initial);
   
-  /*
-
   // Declare and open output file
   ofstream ofile;
   ofile.open("MD.xyz");
   
-  // Create header and write out the starting positions
-  S.header(ofile, n_steps);
-  S.output(ofile, t);
-
+  // Write out the starting positions
+  S.output(ofile, n_cells);
+  
   // Initialise the force and the solver
-  Gravity F(four_pi2, mass_sun);
+  LennardJones F(epsilon, sigma);
   VelocityVerlet solver;
 
-  // Calculate the initial force
-  F.newtonianForces(&S);
+  // Calculate the initial forces
+  F.forces(&S);
 
   // Calculate the constant h/(mass*2)
-  vector<double> h_mass_two;
-  for (int i = 0; i < S.bodies.size(); i++) {
-    h_mass_two.push_back(h/(S.bodies[i]->getMass()*2));
-  }
+  double h_mass_two = h/(S.bodies[0]->getMass()*2);
 
   // Declare a vector storing the forces
-  vector<vec3> forces_temp;
+  vector<vec3> forces_tmp;
   
   // Run the calculations
-  t = 0;
-  while (t < T) {
+  double t = 0;
+  while (t < time_final) {
     
     // Store current forces
-    forces_temp = solver.storeForces(&S);
+    forces_tmp = solver.storeForces(&S);
     
     // Update position
     solver.updatePosition(&S, h, h_mass_two);
     
     // Update forces
     S.resetForces();
-    F.newtonianForces(&S);
+    F.forces(&S);
     
     // Update velocity
-    solver.updateVelocity(&S, h, h_mass_two, forces_temp);
+    solver.updateVelocity(&S, h, h_mass_two, forces_tmp);
     
     // Update time
     t += h;
     
     // Write to file
-    S.output(ofile, t);
+    S.output(ofile, n_cells);
   }
 
   ofile.close();
-  
-  */
 
   return 0;
 }
