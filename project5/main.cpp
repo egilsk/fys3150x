@@ -37,7 +37,8 @@ int main (int argc, char* argv[]){
   // Initialise the system
   System S;
   S.initialiseLattice(n_cells, b, m, temperature_initial);
-   
+  S.resetMomentum();
+
   // Declare and open output file
   ofstream ofile;
   ofile.open("MD.xyz");

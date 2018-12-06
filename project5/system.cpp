@@ -10,6 +10,27 @@ void System::resetPotential()
   for (Atom* object : bodies) { object->setPotential_energy(0); }
 }
 
+void System::resetMomentum()
+{
+
+  vec3 net_velocity(0, 0, 0);
+  
+  for (Atom* object : bodies) {
+
+    net_velocity += object->getVelocity();
+
+  }
+
+  net_velocity /= bodies.size();
+
+  for (Atom* object : bodies) {
+
+    object->setVelocity( object->getVelocity() - net_velocity );
+    
+  }
+
+}
+
 void System::initialiseLattice(int n_cells, double b, double m, double T)
 {
   int n_atoms = 4*n_cells*n_cells*n_cells;

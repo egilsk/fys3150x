@@ -29,6 +29,9 @@ class System {
   // Reset the potential energy of the objects
   void resetPotential();
 
+  // Reset the net momentum
+  void resetMomentum();
+
   // Initialise the FCC-lattice
   void initialiseLattice(int n_cells, double b, double m, double T);
 

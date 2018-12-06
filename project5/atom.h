@@ -13,6 +13,7 @@ class Atom {
   double m_mass;
   
   vec3 m_force;
+  vec3 m_momentum;
   double m_kinetic_energy;
   double m_potential_energy;
 
@@ -32,6 +33,7 @@ class Atom {
   vec3 getVelocity() { return m_velocity; }
   double getMass() { return m_mass; }
   vec3 getForce() { return m_force; }
+  vec3 getMomentum() { return m_momentum; }
   double getKinetic_energy() { return m_kinetic_energy; }
   double getPotential_energy() { return m_potential_energy; }
 
@@ -45,7 +47,9 @@ class Atom {
   void setForce(vec3 force) { m_force = force; }
   void setPotential_energy(double potential_energy) { m_potential_energy = potential_energy; }
 
+  void setMomentum() { m_momentum = m_velocity*m_mass; }
   void setKinetic_energy() { m_kinetic_energy = 0.5*m_mass*m_velocity.lengthSquared(); }
+
 
 };
 
