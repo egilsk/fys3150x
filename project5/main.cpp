@@ -33,7 +33,6 @@ int main (int argc, char* argv[]){
   double b = 5.26;                                                    // [Angstrom]
   double m = 39.948;                                                  // [u]
 
-  
   // Initialise the system
   System S;
   S.initialiseLattice(n_cells, b, m, temperature_initial);
