@@ -51,6 +51,7 @@ int main (int argc, char* argv[]){
 
   // Calculate the initial forces
   F.forces(&S);
+  S.resetForces();
 
   // Calculate the constant h/(mass*2)
   double h_mass_two = h/(S.bodies[0]->getMass()*2);
@@ -70,8 +71,8 @@ int main (int argc, char* argv[]){
     S.periodic(n_cells, b);
     
     // Update forces
-    S.resetForces();
-    F.forces(&S);
+    //S.resetForces();
+    //F.forces(&S);
     
     // Update velocity
     solver.updateVelocity(&S, h, h_mass_two, forces_tmp);

@@ -13,6 +13,14 @@ void System::resetPotential()
 void System::initialiseLattice(int n_cells, double b, double m, double T)
 {
   int n_atoms = 4*n_cells*n_cells*n_cells;
+  double std_dev = sqrt(T/m);
+
+  // Initialise the seed generator
+  random_device rd;
+  // Call the Mersenne Twister generator
+  mt19937_64 gen(rd());
+  // Set up the uniform distribution
+  normal_distribution<double> distribution(0.0, std_dev);
 
   vec3 r, v;
   Atom* atom;
@@ -22,28 +30,28 @@ void System::initialiseLattice(int n_cells, double b, double m, double T)
       for (int k = 0; k < n_cells; k++){
 	
 	r = vec3(i*b, j*b, k*b);
-	v = vec3(0, 0, 0);
+	v = vec3(distribution(gen), distribution(gen), distribution(gen));
 	
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 	
 	r = vec3((i+0.5)*b, (j+0.5)*b, k*b);
-	v = vec3(0,0,0);
+	v = vec3(distribution(gen), distribution(gen), distribution(gen));
 
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 
         r = vec3(i*b, (j+0.5)*b, (k+0.5)*b);
-	v = vec3(0,0,0);	
+	v = vec3(distribution(gen), distribution(gen), distribution(gen));	
 
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 	
 	r = vec3((i+0.5)*b, j*b, (k+0.5)*b);
-	v = vec3(0,0,0);	
+	v = vec3(distribution(gen), distribution(gen), distribution(gen));	
 
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
