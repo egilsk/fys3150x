@@ -17,11 +17,11 @@ int main (int argc, char* argv[]){
   }
   else{
     n_steps = atoi(argv[1]);
-    time_final = atof(argv[2])/10.0224;                               // []
+    time_final = atof(argv[2])/0.100224;                              // []
     n_cells = atoi(argv[3]);
     temperature_initial = atof(argv[4])/119.735;                      // []
   }
-  
+
   // Define the step size
   double h = time_final/n_steps;
 
@@ -37,7 +37,7 @@ int main (int argc, char* argv[]){
   // Initialise the system
   System S;
   S.initialiseLattice(n_cells, b, m, temperature_initial);
-  
+   
   // Declare and open output file
   ofstream ofile;
   ofile.open("MD.xyz");
@@ -58,7 +58,7 @@ int main (int argc, char* argv[]){
 
   // Declare a vector storing the forces
   vector<vec3> forces_tmp;
-  
+
   // Run the calculations
   double t = 0;
   while (t < time_final) {
