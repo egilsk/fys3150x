@@ -68,7 +68,7 @@ int main (int argc, char* argv[]){
     
     // Update position
     solver.updatePosition(&S, h, h_mass_two);
-    //S.periodic(n_cells, b);
+    S.periodic(n_cells, b);
     
     // Update forces
     //S.resetForces();
