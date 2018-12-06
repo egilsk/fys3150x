@@ -29,12 +29,14 @@ int main (int argc, char* argv[]){
   double epsilon = 1.0;                                               // []
   double sigma = 1.0;                                                 // []
 
-  // Define the lattice constant
+  // Define the lattice constant and the atomic mass
   double b = 5.26;                                                    // [Angstrom]
+  double m = 39.948;                                                  // [au]
+
   
   // Initialise the system
   System S;
-  S.initialiseLattice(n_cells, b, temperature_initial);
+  S.initialiseLattice(n_cells, b, m, temperature_initial);
   
   // Declare and open output file
   ofstream ofile;
@@ -65,6 +67,7 @@ int main (int argc, char* argv[]){
     
     // Update position
     solver.updatePosition(&S, h, h_mass_two);
+    S.periodic(n_cells, b);
     
     // Update forces
     S.resetForces();

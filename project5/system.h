@@ -30,7 +30,10 @@ class System {
   void resetPotential();
 
   // Initialise the FCC-lattice
-  void initialiseLattice(int n_cells, double b, double T);
+  void initialiseLattice(int n_cells, double b, double m, double T);
+
+  // Apply periodic boundary conditions
+  void periodic(int n_cells, double b);
 
   // Write the position of the objects to file
   void output(ofstream& ofile, int);
