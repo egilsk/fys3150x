@@ -84,5 +84,5 @@ void System::output(ofstream& ofile, int n_cells)
     ofile << setw(16) << object->getPosition().y();
     ofile << setw(16) << object->getPosition().z() << endl;
   }
-  ofile << endl;
+
 }
