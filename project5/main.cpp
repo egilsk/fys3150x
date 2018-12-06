@@ -12,14 +12,14 @@ int main (int argc, char* argv[]){
   int n_steps; double time_final; int n_cells; double temperature_initial;
   // Read the number of steps, the final time, the number of unit cells and the initial temperature
   if( argc <= 4 ){
-    cout << "Error: " << argv[0] << " reads number of steps, final time, number of unit cells and initial temperature" << endl;
+    cout << "Error: " << argv[0] << " reads number of steps, final time (picoseconds), number of unit cells and initial temperature (kelvin) " << endl;
     exit(1);
   }
   else{
     n_steps = atoi(argv[1]);
-    time_final = atof(argv[2]);                                       // []
+    time_final = atof(argv[2])/10.0224;                               // []
     n_cells = atoi(argv[3]);
-    temperature_initial = atof(argv[4]);                              // []
+    temperature_initial = atof(argv[4])/119.735;                      // []
   }
   
   // Define the step size
@@ -27,11 +27,11 @@ int main (int argc, char* argv[]){
 
   // Define epsilon and sigma
   double epsilon = 1.0;                                               // []
-  double sigma = 1.0;                                                 // []
+  double sigma = 3.405;                                               // [Angstrom]
 
   // Define the lattice constant and the atomic mass
   double b = 5.26;                                                    // [Angstrom]
-  double m = 39.948;                                                  // [au]
+  double m = 39.948;                                                  // [u]
 
   
   // Initialise the system
