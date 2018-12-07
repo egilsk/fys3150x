@@ -111,6 +111,7 @@ void System::output(ofstream& ofile)
   ofile << setw(16) << m_n_atoms << endl;
   ofile << endl;
   for (Atom* object : bodies) {
+    ofile << setw(16) << "H";
     ofile << setw(16) << object->getPosition().x();
     ofile << setw(16) << object->getPosition().y();
     ofile << setw(16) << object->getPosition().z() << endl;
