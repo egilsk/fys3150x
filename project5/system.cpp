@@ -1,5 +1,8 @@
 #include "system.h"
 
+System::System(int n_cells, double b):
+  m_n_cells(n_cells), m_b(b), m_n_atoms(4*m_n_cells*m_n_cells*m_n_cells), m_size(m_n_cells*m_b) {}
+
 void System::resetForces()
 {
   for (Atom* object : bodies) { object->setForce({0,0,0}); }
@@ -31,9 +34,8 @@ void System::resetMomentum()
 
 }
 
-void System::initialiseLattice(int n_cells, double b, double m, double T)
+void System::initialiseLattice(double m, double T)
 {
-  int n_atoms = 4*n_cells*n_cells*n_cells;
   double std_dev = sqrt(T/m);
 
   // Initialise the seed generator
@@ -46,32 +48,32 @@ void System::initialiseLattice(int n_cells, double b, double m, double T)
   vec3 r, v;
   Atom* atom;
 
-  for (int i = 0; i < n_cells; i++){
-    for (int j = 0; j < n_cells; j++){
-      for (int k = 0; k < n_cells; k++){
+  for (int i = 0; i < m_n_cells; i++){
+    for (int j = 0; j < m_n_cells; j++){
+      for (int k = 0; k < m_n_cells; k++){
 	
-	r = vec3(i*b, j*b, k*b);
+	r = vec3(i*m_b, j*m_b, k*m_b);
 	v = vec3(distribution(gen), distribution(gen), distribution(gen));
 	
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 	
-	r = vec3((i+0.5)*b, (j+0.5)*b, k*b);
+	r = vec3((i+0.5)*m_b, (j+0.5)*m_b, k*m_b);
 	v = vec3(distribution(gen), distribution(gen), distribution(gen));
 
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 
-        r = vec3(i*b, (j+0.5)*b, (k+0.5)*b);
+        r = vec3(i*m_b, (j+0.5)*m_b, (k+0.5)*m_b);
 	v = vec3(distribution(gen), distribution(gen), distribution(gen));	
 
 	atom = new Atom(r, v, m);
 	this->addObject(atom);
 	
 	
-	r = vec3((i+0.5)*b, j*b, (k+0.5)*b);
+	r = vec3((i+0.5)*m_b, j*m_b, (k+0.5)*m_b);
 	v = vec3(distribution(gen), distribution(gen), distribution(gen));	
 
 	atom = new Atom(r, v, m);
@@ -83,22 +85,30 @@ void System::initialiseLattice(int n_cells, double b, double m, double T)
 
 }
 
-void System::periodic(int n_cells, double b)
+void System::periodicPosition()
 {
-  double size = n_cells*b;
-
   for (Atom* object : bodies) {
 
-    object->setX( object->getX() - floor( object->getX()/size )*size );
-    object->setY( object->getY() - floor( object->getY()/size )*size );
-    object->setZ( object->getZ() - floor( object->getZ()/size )*size );
+    object->setX( object->getX() - floor( object->getX()/m_size )*m_size );
+    object->setY( object->getY() - floor( object->getY()/m_size )*m_size );
+    object->setZ( object->getZ() - floor( object->getZ()/m_size )*m_size );
     
   }
 }
 
-void System::output(ofstream& ofile, int n_cells)
+void System::periodicDistance(vec3* r_ij)
 {
-  ofile << setw(16) << 4*n_cells*n_cells*n_cells << endl;
+  double x = r_ij->x() - nearbyint( r_ij->x()/m_size )*m_size;
+  double y = r_ij->y() - nearbyint( r_ij->y()/m_size )*m_size;
+  double z = r_ij->z() - nearbyint( r_ij->z()/m_size )*m_size;
+
+  r_ij->setXYZ(x,y,z);
+
+}
+
+void System::output(ofstream& ofile)
+{
+  ofile << setw(16) << m_n_atoms << endl;
   ofile << endl;
   for (Atom* object : bodies) {
     ofile << setw(16) << object->getPosition().x();
