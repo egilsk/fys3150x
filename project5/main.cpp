@@ -3,6 +3,7 @@
 #include "system.h"
 #include "lennard_jones.h"
 #include "velocity_verlet.h"
+#include "statistics_sampler.h"
 
 using namespace std;
 
@@ -27,8 +28,9 @@ int main (int argc, char* argv[]){
     temperature_initial = atof(argv[4])/(epsilon/k_B);                 // [epsilon/k_B]
   }
   
-  // Define the step size
+  // Define the step size and initialise time
   double h = time_final/n_steps;
+  double t = 0;
 
   // Define the lattice constant and the atomic mass
   double b = 5.26e-10/sigma;                                          // [sigma]
@@ -39,12 +41,22 @@ int main (int argc, char* argv[]){
   S.initialiseLattice(m, temperature_initial);
   S.resetMomentum();
 
-  // Declare and open output file
-  ofstream ofile;
-  ofile.open("MD.xyz");
+  // Initialise the statistical sampler
+  StatisticsSampler sampler;
+
+  // Declare and open output files
+  ofstream ofile_xyz;
+  ofile_xyz.open("MD.xyz");
+  ofstream ofile_dat;
+  ofile_dat.open("MD.dat");
   
   // Write out the starting positions
-  S.output(ofile);
+  S.output(ofile_xyz);
+
+  // Create header and write out initial sample
+  sampler.header(ofile_dat, n_steps);
+  sampler.sample(&S);
+  sampler.output(ofile_dat, t);
   
   // Initialise the force and the solver
   LennardJones F;
@@ -60,7 +72,6 @@ int main (int argc, char* argv[]){
   vector<vec3> forces_tmp;
 
   // Run the calculations
-  double t = 0;
   while (t < time_final) {
     
     // Store current forces
@@ -77,14 +88,20 @@ int main (int argc, char* argv[]){
     // Update velocity
     solver.updateVelocity(&S, h, h_mass_two, forces_tmp);
     
+    // Sample
+    sampler.sample(&S);
+
     // Update time
     t += h;
     
     // Write to file
-    S.output(ofile);
+    S.output(ofile_xyz);
+    sampler.output(ofile_dat, t);
+    
   }
 
-  ofile.close();
+  ofile_xyz.close();
+  ofile_dat.close();
 
   return 0;
 }

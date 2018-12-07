@@ -8,11 +8,6 @@ void System::resetForces()
   for (Atom* object : bodies) { object->setForce({0,0,0}); }
 }
 
-void System::resetPotential()
-{
-  for (Atom* object : bodies) { object->setPotential_energy(0); }
-}
-
 void System::resetMomentum()
 {
 

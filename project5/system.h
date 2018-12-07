@@ -15,10 +15,12 @@ class System {
   double m_b;
   int m_n_atoms;
   double m_size;
+  double m_potential_energy;
 
  public:
 
-  // Constructor
+  // Constructors
+  System() {}
   System(int n_cells, double b);
 
   // Destructor
@@ -33,11 +35,16 @@ class System {
   // Reset the forces on the objects
   void resetForces();
 
-  // Reset the potential energy of the objects
-  void resetPotential();
-
   // Reset the net momentum
   void resetMomentum();
+
+  // Getters and setters
+  int getN_cells() { return m_n_cells; } 
+  int getB() { return m_b; }
+  int getN_atoms() { return m_n_atoms; }
+  int getSize() { return m_size; }
+  double getPotential_energy() { return m_potential_energy; }
+  void setPotential_energy(double potential_energy) { m_potential_energy = potential_energy; }
 
   // Initialise the FCC-lattice
   void initialiseLattice(double m, double T);

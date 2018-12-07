@@ -13,7 +13,7 @@ class LennardJones
   // Destructor
   ~LennardJones() {}
   
-  // Calculate the forces between the objects in the system
+  // Calculate the forces between the objects in the system, and the potential energy of the system
   void forces(System* system);
 
 };
