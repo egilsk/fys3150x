@@ -38,7 +38,7 @@ int main (int argc, char* argv[]){
   double t = 0;
 
   // Define the lattice constant and the atomic mass
-  double b = 5.26e-10/sigma;                                          // [sigma]
+  double b = 5.26e-10/sigma*1.09325;                                          // [sigma]
   double m = 39.948;                                                  // [u]
 
   // Initialise the system
