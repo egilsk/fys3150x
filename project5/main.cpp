@@ -58,8 +58,8 @@ int main (int argc, char* argv[]){
   S.output(ofile_xyz);
 
   // Create header and write out initial sample
-  sampler.header(ofile_dat, n_steps);
-  sampler.sample(S);
+  sampler.header(ofile_dat, n_steps, temperature_initial, epsilon, k_B);
+  sampler.sample(S, t);
   sampler.output(ofile_dat, t, sigma, epsilon, u, k_B);
   
   // Initialise the force and the solver
@@ -95,11 +95,11 @@ int main (int argc, char* argv[]){
     // Update velocity
     solver.updateVelocity(&S, h, h_mass_two, forces_tmp);
     
-    // Sample
-    sampler.sample(S);
-
     // Update time
     t += h;
+
+    // Sample
+    sampler.sample(S, t);
     
     // Write to file
     S.output(ofile_xyz);

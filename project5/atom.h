@@ -16,6 +16,8 @@ class Atom {
   vec3 m_momentum;
   double m_kinetic_energy;
 
+  vec3 m_position_initial;
+
  public:
   
   // Constructor
@@ -34,6 +36,7 @@ class Atom {
   vec3 getForce() { return m_force; }
   vec3 getMomentum() { return m_momentum; }
   double getKinetic_energy() { return m_kinetic_energy; }
+  vec3 getInitial_position() { return m_position_initial; }
 
   // Setters
   void setPosition(vec3 position) { m_position = position; }
