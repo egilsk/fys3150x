@@ -5,9 +5,14 @@
 #include "velocity_verlet.h"
 #include "statistics_sampler.h"
 
+#include <chrono>
+
 using namespace std;
+using namespace chrono;
 
 int main (int argc, char* argv[]){
+
+  // Define constants
 
   double sigma = 3.405e-10;    // [m]
   double epsilon = 1.651e-21;  // [J]
@@ -22,12 +27,12 @@ int main (int argc, char* argv[]){
     exit(1);
   }
   else{
-    n_steps = atoi(argv[1]);
+    n_steps = atoi(argv[1]);                                           // [1]
     time_final = atof(argv[2])*1e-12/(sigma*sqrt(u/epsilon));          // [sigma*sqrt(u/epsilon)]
-    n_cells = atoi(argv[3]);
+    n_cells = atoi(argv[3]);                                           // [1]
     temperature_initial = atof(argv[4])/(epsilon/k_B);                 // [epsilon/k_B]
   }
-  
+
   // Define the step size and initialise time
   double h = time_final/n_steps;
   double t = 0;
@@ -45,18 +50,17 @@ int main (int argc, char* argv[]){
   StatisticsSampler sampler;
 
   // Declare and open output files
-  ofstream ofile_xyz;
-  ofile_xyz.open("MD.xyz");
-  ofstream ofile_dat;
-  ofile_dat.open("MD.dat");
+  ofstream ofile_xyz; ofstream ofile_dat;
+  ofile_xyz.open("positions.xyz");
+  ofile_dat.open("statistics.dat");
   
   // Write out the starting positions
   S.output(ofile_xyz);
 
   // Create header and write out initial sample
   sampler.header(ofile_dat, n_steps);
-  sampler.sample(&S);
-  sampler.output(ofile_dat, t);
+  sampler.sample(S);
+  sampler.output(ofile_dat, t, sigma, epsilon, u, k_B);
   
   // Initialise the force and the solver
   LennardJones F;
@@ -65,11 +69,14 @@ int main (int argc, char* argv[]){
   // Calculate the initial forces
   F.forces(&S);
 
-  // Calculate the constant h/(mass*2)
+  // Calculate the constant h/(mass*2) (Verlet Method)
   double h_mass_two = h/(S.bodies[0]->getMass()*2);
 
   // Declare a vector storing the forces
   vector<vec3> forces_tmp;
+
+  // Time the run
+  auto start = high_resolution_clock::now();
 
   // Run the calculations
   while (t < time_final) {
@@ -89,20 +96,24 @@ int main (int argc, char* argv[]){
     solver.updateVelocity(&S, h, h_mass_two, forces_tmp);
     
     // Sample
-    sampler.sample(&S);
+    sampler.sample(S);
 
     // Update time
     t += h;
     
     // Write to file
     S.output(ofile_xyz);
-    sampler.output(ofile_dat, t);
+    sampler.output(ofile_dat, t, sigma, epsilon, u, k_B);
     
   }
+
+  auto finish = high_resolution_clock::now();  
+  duration<double> time = finish - start;
+  cout << "Time used [s]: " << time.count() << endl;
+  
 
   ofile_xyz.close();
   ofile_dat.close();
 
   return 0;
 }
-

@@ -19,8 +19,6 @@ vector<vec3> VelocityVerlet::storeForces(System* system)
 
 void VelocityVerlet::updatePosition(System* system, const double h, const double h_mass_two)
 {
-
-
   // Update the position
   for (int i = 0; i < system->bodies.size(); i++) {
     
