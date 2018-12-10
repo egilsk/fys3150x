@@ -19,7 +19,7 @@ int main (int argc, char* argv[]){
   double u = 1.66054e-27;      // [kg]
   double k_B = 1.38065e-23;    // [J/K]
 
-  // Declare the number of time steps, the final time, the number of unit cells and the initial temperature 
+  // Declare the number of time steps, the final time, the number of unit cells and the initial temperature
   int n_steps; double time_final; int n_cells; double temperature_initial;
   // Read the number of steps, the final time, the number of unit cells and the initial temperature
   if( argc <= 4 ){
@@ -53,7 +53,7 @@ int main (int argc, char* argv[]){
   ofstream ofile_xyz; ofstream ofile_dat;
   ofile_xyz.open("positions.xyz");
   ofile_dat.open("statistics.dat");
-  
+
   // Write out the starting positions
   S.output(ofile_xyz);
 
@@ -61,7 +61,7 @@ int main (int argc, char* argv[]){
   sampler.header(ofile_dat, n_steps, temperature_initial, epsilon, k_B);
   sampler.sample(S, t);
   sampler.output(ofile_dat, t, sigma, epsilon, u, k_B);
-  
+
   // Initialise the force and the solver
   LennardJones F;
   VelocityVerlet solver;
@@ -80,37 +80,37 @@ int main (int argc, char* argv[]){
 
   // Run the calculations
   while (t < time_final) {
-    
+
     // Store current forces
     forces_tmp = solver.storeForces(&S);
-    
+
     // Update position
     solver.updatePosition(&S, h, h_mass_two);
     S.periodicPosition();
-    
+
     // Update forces
     S.resetForces();
     F.forces(&S);
-    
+
     // Update velocity
     solver.updateVelocity(&S, h, h_mass_two, forces_tmp);
-    
+
     // Update time
     t += h;
 
     // Sample
     sampler.sample(S, t);
-    
+
     // Write to file
     S.output(ofile_xyz);
     sampler.output(ofile_dat, t, sigma, epsilon, u, k_B);
-    
+
   }
 
-  auto finish = high_resolution_clock::now();  
+  auto finish = high_resolution_clock::now();
   duration<double> time = finish - start;
   cout << "Time used [s]: " << time.count() << endl;
-  
+
 
   ofile_xyz.close();
   ofile_dat.close();
