@@ -26,6 +26,14 @@ statistics_sampler.o:	statistics_sampler.cpp
 
 
 
+test:			test.o vec3.o atom.o system.o lennard_jones.o velocity_verlet.o statistics_sampler.o
+				${CPPflags} test.o vec3.o atom.o system.o  lennard_jones.o velocity_verlet.o statistics_sampler.o -o test.exe
+
+test.o:			test.cpp
+				${CPPflags} -c test.cpp
+
+
+
 sandbox:		sandbox.o vec3.o
 				${CPPflags} sandbox.o vec3.o -o sandbox.exe
 
