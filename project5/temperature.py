@@ -30,8 +30,6 @@ with open(datafile, 'r') as infile:
         time[i] = float(line[0])
         temperature[i] = float(line[-2])
 
-print time[-1]
-
 # Create and set up a figure
 fig = plt.figure()
 plt.xlabel("Time [ps]")
