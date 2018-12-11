@@ -29,16 +29,6 @@ void StatisticsSampler::sampleTemperature(System system)
   m_temperature = 2.0*m_kinetic_energy/(3.0*system.getN_atoms());
 }
 
-void StatisticsSampler::sample(System system, double t)
-{
-  sampleKinetic_energy(system);
-  samplePotential_energy(system);
-  sampleTotal_energy(system);
-  sampleD(system, t);
-  sampleTemperature(system);
-
-}
-
 void StatisticsSampler::sampleD(System system, double t)
 {
   vec3 distance(0,0,0);
@@ -59,7 +49,17 @@ void StatisticsSampler::sampleD(System system, double t)
 
 }
 
-void StatisticsSampler::header(ofstream& ofile, int n_steps, double temperature_initial, double epsilon, double k_B)
+void StatisticsSampler::sample(System system, double t)
+{
+  sampleKinetic_energy(system);
+  samplePotential_energy(system);
+  sampleTotal_energy(system);
+  sampleD(system, t);
+  sampleTemperature(system);
+
+}
+
+void StatisticsSampler::header_statistics(ofstream& ofile, int n_steps, double temperature_initial, double epsilon, double k_B)
 {
   ofile << setiosflags(ios::showpoint | ios::scientific | ios::left);
   ofile << "Number of time steps: " << n_steps << endl;
@@ -73,13 +73,29 @@ void StatisticsSampler::header(ofstream& ofile, int n_steps, double temperature_
   ofile << setw(30) << "Diffusion constant [sigma*sqrt(epsilon/u)]" << endl;
 }
 
-void StatisticsSampler::output(ofstream& ofile, double t, double sigma, double epsilon, double u, double k_B)
+void StatisticsSampler::header_diffusion(ofstream& ofile, int n_temperatures)
+{
+  ofile << setiosflags(ios::showpoint | ios::scientific | ios::left);
+  ofile << "Number of temperatures: " << n_temperatures << endl;
+  
+  ofile << setw(30) << "Temperature [K]";
+  ofile << setw(30) << "Diffusion constant [sigma*sqrt(epsilon/u)]" << endl;
+}
+
+void StatisticsSampler::output_statistics(ofstream& ofile, double t, double sigma, double epsilon, double u, double k_B)
 {
   ofile << setw(30) << t*sigma*sqrt(u/epsilon)*1e12;
   ofile << setw(30) << m_kinetic_energy;
   ofile << setw(30) << m_potential_energy;
   ofile << setw(30) << m_total_energy;
   ofile << setw(30) << m_temperature*epsilon/k_B;
+  ofile << setw(30) << m_D << endl;
+
+}
+
+void StatisticsSampler::output_diffusion(ofstream& ofile, double T, double epsilon, double k_B)
+{
+  ofile << setw(30) << T*epsilon/k_B;
   ofile << setw(30) << m_D << endl;
 
 }
