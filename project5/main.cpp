@@ -38,7 +38,7 @@ int main (int argc, char* argv[]){
   // Define the lattice constant and the atomic mass.
   // * The lattice constant is adjusted so that 
   // the density is that of liquid argon
-  double b = 5.26e-10/sigma*1.087666;                                  // [sigma]
+  double b = 5.26e-10/sigma*1.087666;                                 // [sigma]
   double m = 39.948;                                                  // [u]
 
   // Define the step size
@@ -56,14 +56,17 @@ int main (int argc, char* argv[]){
   StatisticsSampler sampler;
 
   // Declare and open output files
-  //ofstream ofile_xyz;
-  //ofile_xyz.open("positions.xyz"); 
+  ofstream ofile_xyz;
+  ofile_xyz.open("positions.xyz");
   ofstream ofile_dat;
-  //ofile_dat.open("statistics.dat");
-  ofile_dat.open("diffusion.dat");
+  ofile_dat.open("statistics.dat");
+
+  // Declare and open output files (Diffusion)
+  //ofstream ofile_dat;
+  //ofile_dat.open("diffusion.dat");
   
-  // Create header
-  sampler.header_diffusion(ofile_dat, n_temperatures);
+  // Create header (Diffusion)
+  //sampler.header_diffusion(ofile_dat, n_temperatures);
 
   // Define the temperature step
   double dT = (temperature_final - temperature_initial)/(n_temperatures - 1);
@@ -92,15 +95,15 @@ int main (int argc, char* argv[]){
     F.forces(&S);
     
     // Write out the starting positions
-    //S.output(ofile_xyz);
+    S.output(ofile_xyz);
     
     // Create header and write out initial sample
-    //sampler.header_statistics(ofile_dat, n_steps, T, epsilon, k_B);
-    //sampler.sample(S, t);
-    //sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
+    sampler.header_statistics(ofile_dat, n_steps, T, epsilon, k_B);
+    sampler.sample(S, t);
+    sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
 
     // Equilibration
-    for ( int j = 0; j < 60; j++) {
+    for ( int j = 0; j < 0; j++) {
 
       // Store current forces
       forces_tmp = solver.storeForces(&S);
@@ -139,25 +142,27 @@ int main (int argc, char* argv[]){
       t += h;
       
       // Sample
-      //sampler.sample(S, t);
-      sampler.sampleKinetic_energy(S);
-      sampler.sampleTemperature(S);
-      T_average += sampler.getTemperature();
+      sampler.sample(S, t);
+
+      // Sample (Diffusion)
+      //sampler.sampleKinetic_energy(S);
+      //sampler.sampleTemperature(S);
+      //T_average += sampler.getTemperature();
       
       // Write to file
-      //S.output(ofile_xyz);
-      //sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
+      S.output(ofile_xyz);
+      sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
       
     }
     
     // Calculate average temperature
     T_average /= n_steps + 1;
 
-    // Sample
-    sampler.sampleD(S, t);
+    // Sample (Diffusion)
+    //sampler.sampleD(S, t);
 
-    // Write to file
-    sampler.output_diffusion(ofile_dat, T_average, epsilon, k_B);
+    // Write to file (Diffusion)
+    //sampler.output_diffusion(ofile_dat, T_average, epsilon, k_B);
 
     // Update initial temperature
     T += dT;
@@ -168,7 +173,7 @@ int main (int argc, char* argv[]){
   duration<double> time = finish - start;
   cout << "Time used [s]: " << time.count() << endl;
   
-  //ofile_xyz.close();
+  ofile_xyz.close();
   ofile_dat.close();
   
   return 0;

@@ -31,11 +31,3 @@ test:			test.o vec3.o atom.o system.o lennard_jones.o velocity_verlet.o statisti
 
 test.o:			test.cpp
 				${CPPflags} -c test.cpp
-
-
-
-sandbox:		sandbox.o vec3.o
-				${CPPflags} sandbox.o vec3.o -o sandbox.exe
-
-sandbox.o:		sandbox.cpp
-				${CPPflags} -c sandbox.cpp

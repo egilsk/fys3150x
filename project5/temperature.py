@@ -32,6 +32,7 @@ with open(datafile, 'r') as infile:
 
 # Create and set up a figure
 fig = plt.figure()
+plt.axis([0, 10, 0.3, 1])
 plt.xlabel("Time [ps]")
 plt.ylabel("Temperature Ratio")
 plt.title("Ratio of Temperature to Initial Temperature")
