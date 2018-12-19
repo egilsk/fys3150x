@@ -38,6 +38,6 @@ plt.title("Diffusion Constant as Function of Temperature")
 plt.plot(temperature, diffusion_constant)
 
 # Save the plot
-#plt.savefig("temperature.png")
+plt.savefig("diffusion.png")
 
 plt.show()
