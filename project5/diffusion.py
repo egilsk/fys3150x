@@ -29,6 +29,7 @@ with open(datafile, 'r') as infile:
 
 # Create and set up a figure
 fig = plt.figure()
+plt.axis([56, 106, 0, 0.007])
 plt.xlabel("Temperature [K]")
 plt.ylabel("Diffusion constant " + r"$[\sigma*\sqrt{\epsilon/u}]$")
 plt.title("Diffusion Constant as Function of Temperature")

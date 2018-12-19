@@ -13,7 +13,6 @@ using namespace chrono;
 int main (int argc, char* argv[]){
 
   // Define constants
-
   double sigma = 3.405e-10;    // [m]
   double epsilon = 1.651e-21;  // [J]
   double u = 1.66054e-27;      // [kg]
@@ -56,17 +55,17 @@ int main (int argc, char* argv[]){
   StatisticsSampler sampler;
 
   // Declare and open output files
-  ofstream ofile_xyz;
-  ofile_xyz.open("positions.xyz");
-  ofstream ofile_dat;
-  ofile_dat.open("statistics.dat");
+  //ofstream ofile_xyz;
+  //ofile_xyz.open("positions.xyz");
+  //ofstream ofile_dat;
+  //ofile_dat.open("statistics.dat");
 
   // Declare and open output files (Diffusion)
-  //ofstream ofile_dat;
-  //ofile_dat.open("diffusion.dat");
+  ofstream ofile_dat;
+  ofile_dat.open("diffusion.dat");
   
   // Create header (Diffusion)
-  //sampler.header_diffusion(ofile_dat, n_temperatures);
+  sampler.header_diffusion(ofile_dat, n_temperatures);
 
   // Define the temperature step
   double dT = (temperature_final - temperature_initial)/(n_temperatures - 1);
@@ -95,15 +94,15 @@ int main (int argc, char* argv[]){
     F.forces(&S);
     
     // Write out the starting positions
-    S.output(ofile_xyz);
+    //S.output(ofile_xyz);
     
     // Create header and write out initial sample
-    sampler.header_statistics(ofile_dat, n_steps, T, epsilon, k_B);
-    sampler.sample(S, t);
-    sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
+    //sampler.header_statistics(ofile_dat, n_steps, T, epsilon, k_B);
+    //sampler.sample(S, t);
+    //sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
 
     // Equilibration
-    for ( int j = 0; j < 0; j++) {
+    for ( int j = 0; j < 50; j++) {
 
       // Store current forces
       forces_tmp = solver.storeForces(&S);
@@ -142,16 +141,16 @@ int main (int argc, char* argv[]){
       t += h;
       
       // Sample
-      sampler.sample(S, t);
+      //sampler.sample(S, t);
 
       // Sample (Diffusion)
-      //sampler.sampleKinetic_energy(S);
-      //sampler.sampleTemperature(S);
-      //T_average += sampler.getTemperature();
+      sampler.sampleKinetic_energy(S);
+      sampler.sampleTemperature(S);
+      T_average += sampler.getTemperature();
       
       // Write to file
-      S.output(ofile_xyz);
-      sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
+      //S.output(ofile_xyz);
+      //sampler.output_statistics(ofile_dat, t, sigma, epsilon, u, k_B);
       
     }
     
@@ -159,10 +158,10 @@ int main (int argc, char* argv[]){
     T_average /= n_steps + 1;
 
     // Sample (Diffusion)
-    //sampler.sampleD(S, t);
+    sampler.sampleD(S, t);
 
     // Write to file (Diffusion)
-    //sampler.output_diffusion(ofile_dat, T_average, epsilon, k_B);
+    sampler.output_diffusion(ofile_dat, T_average, epsilon, k_B);
 
     // Update initial temperature
     T += dT;
@@ -173,7 +172,7 @@ int main (int argc, char* argv[]){
   duration<double> time = finish - start;
   cout << "Time used [s]: " << time.count() << endl;
   
-  ofile_xyz.close();
+  //ofile_xyz.close();
   ofile_dat.close();
   
   return 0;

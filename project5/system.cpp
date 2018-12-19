@@ -34,9 +34,9 @@ void System::initialiseLattice(double m, double T)
   double std_dev = sqrt(T/m);
 
   // Initialise the seed generator
-  random_device rd;
+  //random_device rd;
   // Call the Mersenne Twister generator
-  mt19937_64 gen(rd());
+  mt19937_64 gen(1997);
   // Set up the uniform distribution
   normal_distribution<double> distribution(0.0, std_dev);
 
